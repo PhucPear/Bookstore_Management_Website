@@ -1,0 +1,201 @@
+﻿<!DOCTYPE html>
+<html class="no-js" lang="">
+
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>Nhà sách Nguyễn Văn Cừ</title>
+    <meta name="description" content="">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="apple-touch-icon" href="apple-touch-icon.png">
+    <link rel="stylesheet" href="~/assets/user/css/bootstrap.min.css">
+    <link rel="stylesheet" href="~/assets/user/css/normalize.css">
+    <link rel="stylesheet" href="~/assets/user/css/font-awesome.min.css">
+    <link rel="stylesheet" href="~/assets/user/css/icomoon.css">
+    <link rel="stylesheet" href="~/assets/user/css/jquery-ui.css">
+    <link rel="stylesheet" href="~/assets/user/css/owl.carousel.css">
+    <link rel="stylesheet" href="~/assets/user/css/transitions.css">
+    <link rel="stylesheet" href="~/assets/user/css/main.css">
+    <link rel="stylesheet" href="~/assets/user/css/color.css">
+    <link rel="stylesheet" href="~/assets/user/css/responsive.css">
+    <link rel="stylesheet" href="~/assets/user/css/cart.css">
+    <link rel="stylesheet" href="~/assets/user/css/blue.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.11.2/css/all.min.css" />
+    <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>
+    <script src="~/assets/user/js/vendor/modernizr-2.8.3-respond-1.4.2.min.js"></script>
+</head>
+<body>
+    <div id="tg-wrapper" class="tg-wrapper tg-haslayout">
+        <!--************************************
+                Header Start
+        *************************************-->
+        <header id="tg-header" class="tg-header tg-haslayout">
+            <div class="tg-topbar">
+                <div class="container">
+                    <div class="row">
+                        <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+                            <ul class="tg-addnav">
+                                <li>
+                                    <a href="javascript:void(0);">
+                                        <i class="icon-envelope"></i>
+                                        <em>Liên Hệ</em>
+                                    </a>
+                                </li>
+                                <li>
+                                    <a href="javascript:void(0);">
+                                        <i class="icon-question-circle"></i>
+                                        <em>Hổ Trợ</em>
+                                    </a>
+                                </li>
+                            </ul>
+                            <!--************************************
+                                    KHACH HANG
+                            *************************************-->
+                            @Html.Action("KhachHangPartial", "Home")
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="tg-middlecontainer">
+                <div class="container">
+                    <div class="row">
+                        <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+                            <strong class="tg-logo"><a href="@Url.Action("TrangChu", "Home")"><img src="~/assets/user/images/logo.png" alt="company name here"></a></strong>
+                            <div class="tg-wishlistandcart">                              
+                                <!--************************************
+                                        GIO HANG
+                                *************************************-->
+                                @Html.Action("GioHangPartial", "Home")
+                            </div>
+                            <!--************************************
+                                    TIM KIEM
+                            *************************************-->
+                            <div class="tg-searchbox">
+                                <form class="tg-formtheme tg-formsearch" action="/SanPham/SearchSanPham" method="post">
+                                    <fieldset>
+                                        <input type="text" id="searchInput" name="searchSP" class="typeahead form-control" placeholder="Tìm sản phẩm mong muốn..." spellcheck="false" style="text-transform: none;">                                        
+                                        <button type="submit" id="searchButton"><i class="icon-magnifier"></i></button>
+                                    </fieldset>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            @Html.Action("DanhMucPartial", "Home")
+        </header>
+        <!--************************************
+                Header End
+        *************************************-->
+        <!--************************************
+                Public
+        *************************************-->
+        @RenderBody()
+        <!--************************************
+                Public
+        *************************************-->
+        <!--************************************
+                Footer Start
+        *************************************-->
+        <footer id="tg-footer" class="tg-footer tg-haslayout">
+            <div class="tg-footerarea">
+                <div class="container">
+                    <div class="row">           
+                        <div class="tg-threecolumns">
+                            <div class="col-xs-12 col-sm-6 col-md-4 col-lg-4">
+                                <div class="tg-footercol">
+                                    <strong class="tg-logo"><a href="javascript:void(0);"><img src="~/assets/user/images/flogo.png" alt="image description"></a></strong>
+                                    <ul class="tg-contactinfo">
+                                        <li>
+                                            <i class="icon-apartment"></i>
+                                            <address>Địa chỉ: 805 – 809 Hồng Bàng – P. 9 – Q. 6 – TP. HCM</address>
+                                        </li>
+                                        <li>
+                                            <i class="icon-phone-handset"></i>
+                                            <span>
+                                                <em>0800 12345 - 678 - 89</em>
+                                                <em>+4 1234 - 4567 - 67</em>
+                                            </span>
+                                        </li>
+                                        <li>
+                                            <i class="icon-clock"></i>
+                                            <span>7:30 AM - 22:00 PM</span>
+                                        </li>
+                                        <li>
+                                            <i class="icon-envelope"></i>
+                                            <span>
+                                                <em><a href="mailto:support@domain.com">support@domain.com</a></em>
+                                                <em><a href="mailto:info@domain.com">info@domain.com</a></em>
+                                            </span>
+                                        </li>
+                                    </ul>                                 
+                                </div>
+                            </div>
+                            <div class="col-xs-12 col-sm-6 col-md-4 col-lg-4">
+                                <div class="tg-footercol tg-widget tg-widgetnavigation">
+                                    <div class="tg-widgettitle">
+                                        <h3>Thông tin vận chuyển và trợ giúp</h3>
+                                    </div>
+                                    <div class="tg-widgetcontent">
+                                        <ul style="padding:1%;">
+                                            <li><a href="javascript:void(0);">Điều khoản sử dụng</a></li>
+                                            <li><a href="javascript:void(0);">Chính sách bảo mật thông tin cá nhân</a></li>
+                                            <li><a href="javascript:void(0);">Chính sách bảo mật thanh toán</a></li>
+                                            <li><a href="javascript:void(0);">Hệ thống trung tâm - nhà sách</a></li>
+                                            <li><a href="javascript:void(0);">Chính sách đổi - trả - hoàn tiền</a></li>                                            
+                                        </ul>
+                                        <ul style="padding:1%;">
+                                            <li><a href="javascript:void(0);">Phương thức thanh toán và xuất HĐ</a></li>
+                                            <li><a href="javascript:void(0);">Chính sách bảo hành - bồi hoàn</a></li>
+                                            <li><a href="javascript:void(0);">Chính sách vận chuyển</a></li>
+                                            <li><a href="javascript:void(0);">Chính sách khách sỉ</a></li>
+                                        </ul>
+                                    </div>
+                                </div>
+                            </div>
+                         
+                        </div>
+                    </div>
+                </div>
+            </div>
+           
+            <div class="tg-footerbar">
+                <a id="tg-btnbacktotop" class="tg-btnbacktotop" href="javascript:void(0);"><i class="icon-chevron-up"></i></a>
+                <div class="container">
+                    <div class="row">
+                        <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+                            <span class="tg-paymenttype"><img src="~/assets/user/images/paymenticon.png" alt="image description"></span>
+                            <span class="tg-copyright">2023 All Rights Reserved By &copy; Nhà Sách Nguyễn Văn Cừ</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </footer>
+        <!--************************************
+                Footer End
+        *************************************-->
+    </div>
+    <!--************************************
+            Wrapper End
+    *************************************-->
+    <script src="~/assets/user/js/vendor/jquery-library.js"></script>
+    <script src="~/assets/user/js/vendor/bootstrap.min.js"></script>
+    <script src="~/assets/user/js/owl.carousel.min.js"></script>
+    <script src="~/assets/user/js/jquery.vide.min.js"></script>
+    <script src="~/assets/user/js/countdown.js"></script>
+    <script src="~/assets/user/js/jquery-ui.js"></script>
+    <script src="~/assets/user/js/parallax.js"></script>
+    <script src="~/assets/user/js/countTo.js"></script>
+    <script src="~/assets/user/js/appear.js"></script>
+    <script src="~/assets/user/js/main.js"></script>
+    <script src="~/assets/user/js/cart.js"></script>
+    <script src="~/assets/user/js/checkout.js"></script>
+    <script src="~/assets/user/js/order.js"></script>
+    <script src="~/assets/user/js/search.js"></script>
+    <script src="~/assets/user/js/icheck.min.js"></script>  
+    <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.min.js"></script>
+</body>
+
+</html>

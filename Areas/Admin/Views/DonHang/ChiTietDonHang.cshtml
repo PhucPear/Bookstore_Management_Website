@@ -1,0 +1,132 @@
+﻿@model Website_QuanLyNhaSachNguyenVanCu.Areas.Admin.Models.QuanLyThongTin
+@{
+    ViewBag.Title = "ChiTietDonHang";
+    Layout = "~/Areas/Admin/Views/Shared/Admin_LayoutPage.cshtml";
+}
+<div class="container-fluid">
+    <div class="row" style="display:flex; justify-content:center;">
+        <div class="col-lg-6">
+            <div class="card shadow" style="width:100%; height:260px;">
+                <div class="card-header py-3" style="background-color:#B9D3EE;">
+                    <h5 class="m-0 font-weight-bold text-primary">Thông tin khách hàng</h5>
+                </div>
+                <div class="card-body" style="padding-left:2%; padding-right:2%; font-weight:bold;">
+                    <div class="form-row">
+                        <div class="form-group col-md-4">
+                            <label for="tenKH">Mã đơn hàng</label>
+                            <input type="text" class="form-control" id="tenKH" value="@Html.DisplayFor(item => Model.donHang.KHACHHANG.TenKhachHang)" name="tenKH" readonly>
+                        </div>
+                        <div class="form-group col-md-4">
+                            <label for="sdt">Số điện thoại</label>
+                            <input type="text" class="form-control" id="sdt" value="@Html.DisplayFor(item => Model.donHang.SDT)" name="sdt" readonly>
+                        </div>
+                        <div class="form-group col-md-4">
+                            <label for="email">Email</label>
+                            <input type="text" class="form-control" id="email" value="@Html.DisplayFor(item => Model.donHang.KHACHHANG.Email)" name="email" readonly>
+                        </div>
+                    </div>
+
+                    <div class="form-row">
+                        <div class="form-group col-md-12">
+                            <label for="diaChi">Địa chỉ</label>
+                            <input type="text" class="form-control" id="diaChi" value="@Html.DisplayFor(item => Model.donHang.DiaChi)" spellcheck="false" name="diaChi" readonly>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="card shadow" style="width:100%; height:260px;">
+                <div class="card-header py-3" style="background-color:#B9D3EE;">
+                    <h5 class="m-0 font-weight-bold text-primary">Thông tin đơn hàng</h5>
+                </div>
+                <div class="card-body" style="padding-left:2%; padding-right:2%; font-weight:bold;">
+                    <div class="form-row">
+                        <div class="form-group col-md-4">
+                            <label for="maDH">Mã đơn hàng</label>
+                            <input type="text" class="form-control" id="maDH" value="#@Html.DisplayFor(item => Model.donHang.MaDonHang)" name="maDH" readonly>
+                        </div>
+                        <div class="form-group col-md-4">
+                            <label for="ngayDat">Ngày đặt</label>
+                            <input type="datetime" class="form-control" id="ngayDat" value="@Model.donHang.NgayDat.Value.ToString("dd/MM/yyyy")" name="ngayDat" readonly>
+                        </div>
+                        @if (Model.donHang.NgayGiao != null)
+                        {
+                            <div class="form-group col-md-4">
+                                <label for="ngayGiao">Ngày giao</label>
+                                <input type="datetime" class="form-control" id="ngayGiao" value="@Model.donHang.NgayGiao.Value.ToString("dd/MM/yyyy")" name="ngayGiao" readonly>
+                            </div>
+                        }
+                    </div>
+
+                    <div class="form-row">
+                        <div class="form-group col-md-6">
+                            <label for="trangThai">Trạng thái</label>
+                            <input type="text" class="form-control" id="trangThai" value="@Html.DisplayFor(item => Model.donHang.TinhTrang)" spellcheck="false" name="trangThai" readonly>
+                        </div>
+                        <div class="form-group col-md-3">
+                            <label for="thanhToan">Thanh toán</label>
+                            <input type="text" class="form-control" id="thanhToan" value="@Html.DisplayFor(item => Model.donHang.ThanhToan)" spellcheck="false" name="thanhToan" readonly>
+                        </div>
+                        <div class="form-group col-md-3">
+                            <label for="kieuTT">Hình thức thanh toán</label>
+                            <input type="text" class="form-control" id="kieuTT" value="@Html.DisplayFor(item => Model.donHang.HinhThucTT)" spellcheck="false" name="kieuTT" readonly>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div style="padding:2%;">
+                <button class="btn btn-primary" style="font-weight:bold; font-size:large;" onclick="goBack()">Trở lại</button>
+            </div>
+
+        </div>
+
+        <div class="col-lg-6">
+            <div class="card shadow" style="width:100%; height:600px;">
+                <div class="card-header py-3" style="background-color:#B9D3EE;">
+                    <h5 class="m-0 font-weight-bold text-primary">Chi tiết đơn hàng</h5>
+                </div>
+                <div class="card-body">
+                    <table class="table text-center">
+                        <thead>
+                            <tr>
+                                <th style="width:20%">Hình sản phẩm</th>
+                                <th style="width:30%">Tên sản phẩm</th>
+                                <th style="width:14%">Số lượng</th>
+                                <th style="width:18%">Giá</th>
+                                <th style="width:18%">Thành tiền</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach (var item in Model.dsCTDonHang)
+                            {
+                                <tr style="font-size:medium">
+                                    <td><img src="~/assets/user/images/sach/@Html.DisplayFor(i => item.SANPHAM.HinhAnh)" style="width:80px; height:80px;"></td>
+                                    <td style="max-width:200px; white-space: nowrap; overflow:hidden; text-overflow: ellipsis">@Html.DisplayFor(i => item.SANPHAM.TenSanPham)</td>
+                                    <td>20</td>
+                                    @{var dgKM = item.SANPHAM.DonGia - item.SANPHAM.DonGia * item.SANPHAM.KHUYENMAI.TiLe;}
+                                    <td>@string.Format("{0:0.000}", dgKM) đ</td>
+                                    <td>@string.Format("{0:0.000}", item.ThanhTien) đ</td>
+                                </tr>
+                            }
+                        </tbody>
+                        <tfoot>
+                            <tr style="font-size:large">
+                                <td></td>
+                                <td colspan="2" style="text-align:right;">Tổng thành tiền:</td>
+                                <td colspan="2" style="text-align:center; font-weight:bold; color:orangered">@string.Format("{0:0.000}", Model.donHang.TongThanhTien) đ</td>
+                            </tr>
+                        </tfoot>
+                    </table>
+
+                </div>
+            </div>
+        </div>
+
+    </div>
+</div>
+<script>
+    function goBack() {
+        window.history.back();
+    }
+</script>

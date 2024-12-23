@@ -1,0 +1,106 @@
+﻿@model List<Website_QuanLyNhaSachNguyenVanCu.Models.GIOHANG>
+@{
+    ViewBag.Title = "GioHang";
+    Layout = "~/Views/Shared/TrangChu_LayoutPage.cshtml";
+}
+<section class="pt-5 pb-5" style="margin-top:10%; padding-bottom:4%">
+    <div class="container">
+        <div class="row w-100">
+            <div class="col-lg-12 col-md-12 col-12">
+                <h3 class="display-5 mb-2 text-center">Giỏ Hàng</h3>
+                <p class="mb-5 text-center" style="font-size:medium;">
+                    <i class="text-info font-weight-bold">@ViewBag.SoLuongSP</i>&nbsp;&nbsp;&nbsp; Sản Phẩm
+                </p>
+                <table id="shoppingCart" class="table table-condensed table-responsive">
+                    <thead>
+                        <tr>
+                            <th style="width:60%">Sản Phẩm</th>
+                            <th style="width:12%">Đơn Giá</th>
+                            <th style="width:10%">Số Lượng</th>
+                            <th style="width:12%">Thành Tiền</th>
+                            <th style="width:16%"></th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @{
+                            foreach (var item in Model)
+                            {
+                                <tr>
+                                    <td data-th="Product">
+                                        <div class="row">
+                                            <div class="col-md-3 text-left">
+                                                <img style="height:100px" src="~/assets/user/images/sach/@Html.DisplayFor(itemSP => item.SANPHAM.HinhAnh)" alt="" class="img-fluid d-none d-md-block rounded mb-2 shadow">
+                                            </div>
+                                            <div class="col-md-9 text-left mt-sm-2">
+                                                <h4><a href="@Url.Action("ChiTietSanPham", "SanPham", new { @maSP = item.MaSanPham })">@Html.DisplayFor(itemSP => item.SANPHAM.TenSanPham)</a></h4>
+                                            </div>
+                                        </div>
+                                    </td>
+                                    @{var dgKM = item.SANPHAM.DonGia - item.SANPHAM.DonGia * item.SANPHAM.KHUYENMAI.TiLe;}
+                                    <td data-th="Price">@string.Format("{0:0.000}", dgKM) đ</td>
+                                    <td data-th="Quantity">
+                                        <input type="number" class="form-control form-control-lg text-center" value="@Html.DisplayFor(itemSP => item.SoLuong)" min="1" onchange="capNhatSLTrongCart(@item.MaKhachHang, @item.MaSanPham, this.value, this)">
+                                    </td>
+                                    @{var tt = dgKM * item.SoLuong;}
+                                    <td data-th="Price" class="thanhTien">@string.Format("{0:0.000}", tt) đ</td>
+                                    <td class="actions" data-th="">
+                                        <div class="text-center">
+                                            @using (Html.BeginForm("XoaItemGioHang", "GioHang", FormMethod.Post))
+                                            {
+                                                <input type="hidden" name="maSP" value="@item.MaSanPham" />
+                                                <button class="btn btn-white border-secondary bg-white btn-md mb-2" type="submit">
+                                                    <i class="fas fa-trash"></i>
+                                                </button>
+                                            }
+                                        </div>
+                                    </td>
+                                </tr>
+                            }
+                        }
+                    </tbody>
+                </table>
+                <div class="float-right text-right">
+                    <h4>Tổng thành tiền</h4>
+                    <h3 style="text-transform:none; color:orangered; font-weight:bold;" id="tongThanhTien">@string.Format("{0:0.000}", @ViewBag.TongTT) đ</h3>
+                </div>
+            </div>
+        </div>
+        <div class="row mt-4 d-flex align-items-center">
+            <div class="col-sm-6 mb-3 mb-m-1 order-md-1 text-md-left">
+                <a href="@Url.Action("TrangChu", "Home")">
+                    <i class="fas fa-arrow-left mr-2"></i> Tiếp tục mua hàng
+                </a>
+            </div>
+            <div class="col-sm-6 order-md-2 text-right">
+                <a href="@Url.Action("DatHang", "GioHang")" class="btn btn-primary mb-4 btn-lg pl-5 pr-5">Tiến Hành Thanh Toán</a>
+            </div>
+        </div>
+    </div>
+</section>
+<script>
+    //Hàm cập nhật số lượng trong giỏ hàng
+    function capNhatSLTrongCart(maKH, maSP, sl, inputElement) {
+        $.ajax({
+            method: 'POST',
+            url: '/GioHang/CapNhatSLTrongGio',
+            data: { maKH: maKH, maSP: maSP, sl: sl },
+            success: function (data) {
+                if (data.success) {
+                    console.log('Số lượng cập nhật thành: ' + data.sl);
+                    var row = $(inputElement).closest('tr');
+                    var thanhTien = data.dg * data.sl;
+                    console.log('Thành tiền cập nhật thành: ' + thanhTien);
+                    row.find('.thanhTien').text(thanhTien.toFixed(3) + ' đ');
+                    // Cập nhật tổng thành tiền                   
+                    $('#tongThanhTien').text(data.tongTT.toFixed(3) + ' đ');
+                    console.log('Tổng thành tiền cập nhật thành: ' + data.tongTT);
+                } else {
+                    console.error('Cập nhật giỏ hàng không thành công.');
+                }
+            },
+            error: function (error) {
+                console.error('Lỗi khi cập nhật giỏ hàng:', error);
+            }
+        });
+    }
+</script>

@@ -1,0 +1,88 @@
+﻿<!DOCTYPE html>
+
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title>DangNhap</title>
+    <link rel="stylesheet" href="~/assets/user/css/login.css">
+    <!--Bootstrap 4-->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" />
+    <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>
+    <script src="https://cdn.rawgit.com/PascaleBeier/bootstrap-validate/v2.2.0/dist/bootstrap-validate.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.11.2/css/all.min.css" />
+</head>
+<body>
+    <!-- Navbar-->
+    <header class="header">
+        <nav class="navbar navbar-expand-lg navbar-light py-3">
+            <div class="container">
+                <!-- Navbar Brand -->
+                <a href="@Url.Action("DangNhap", "AdminNguoiDung")" class="navbar-brand">
+                    <img src="~/assets/user/images/logo-02.png"
+                         alt="logo"
+                         width="150" />
+                </a>
+            </div>
+        </nav>
+    </header>
+
+    <div class="container" style="padding-top:6%">
+        <div class="row py-2 mt-2 align-items-center">
+
+            <!-- Registeration Form -->
+            <div class="col-md-6 col-lg-8 mx-auto">
+                <h1 style="text-align:center; padding:5%">Quản Trị Nhà Sách Nguyễn Văn Cừ</h1>
+               
+                        <div class="row">
+
+                            <!-- Email Address -->
+                            <div class="input-group col-lg-12 mb-4">
+                                <div class="input-group-prepend">
+                                    <span class="input-group-text bg-white px-4 border-md border-right-0">
+                                        <i class="fa fa-envelope text-muted"></i>
+                                    </span>
+                                </div>
+                                <input id="email"
+                                       type="email"
+                                       name="email"
+                                       placeholder="Email"
+                                       class="form-control bg-white border-left-0 border-md" />
+                            </div>
+
+
+                            <!-- Password -->
+                            <div class="input-group col-lg-12 mb-4">
+                                <div class="input-group-prepend">
+                                    <span class="input-group-text bg-white px-4 border-md border-right-0">
+                                        <i class="fa fa-lock text-muted"></i>
+                                    </span>
+                                </div>
+                                <input id="matkhau"
+                                       type="password"
+                                       name="matkhau"
+                                       placeholder="Mật khẩu"
+                                       class="form-control bg-white border-left-0 border-md" />
+                            </div>
+
+                            <!-- Thong Bao -->
+                            <div id="userAlert" class="alert" style="display:none; margin-left:14px">
+                            </div>
+
+                            <!-- Submit Button -->
+                            <div class="form-group col-lg-12 mx-auto mb-0">
+                                <button type="submit" class="btn btn-primary btn-block py-2" onclick="checkDangNhapADMIN()">
+                                    <span class="font-weight-bold">Đăng Nhập</span>
+                                </button>
+                            </div>
+                                                    
+                        </div>
+                   
+            </div>
+        </div>
+    </div>
+    <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
+    <script src="~/assets/admin/js/login.js"></script>
+</body>
+</html>

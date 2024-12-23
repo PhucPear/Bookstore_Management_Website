@@ -1,0 +1,53 @@
+﻿@{
+    ViewBag.Title = "Backup";
+    Layout = "~/Areas/Admin/Views/Shared/Admin_LayoutPage.cshtml";
+}
+<!-- Thong Bao -->
+<div id="myAlert" class="alert @TempData["LoaiTB"]" style="display:@(TempData["ht"] == null ? "none" : @TempData["ht"]); text-align:center; font-size:large;">
+    @TempData["ThongBao"]
+</div>
+<div class="container-fluid" style="margin-top:280px">
+    <div class="row" style="margin-left:520px;">
+        <div class="col-xl-3 col-md-6 mb-4">
+            <a href="#openModal" data-toggle="modal" style="text-decoration:none;">
+                <div class="card shadow py-2" style="height:160px; width:500px; background-color:#1E90FF;">
+                    <div class="card-body" style="padding-top:10%;">
+                        <div class="row no-gutters align-items-center">
+                            <div class="col mr-2">
+                                <div class="font-weight-bold text-uppercase mb-1" style="font-size:xx-large; color:white;">
+                                    Sao Lưu Database
+                                </div>
+                            </div>
+                            <div class="col-auto">
+                                <i class="fas fa-database fa-2x text-gray-300"></i>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </a>
+        </div>
+    </div>
+</div>
+
+<div id="openModal" class="modal fade">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            @{
+                using (Html.BeginForm("BackupDatabase", "Database", FormMethod.Get))
+                {
+                    <div class="modal-header">
+                        <h4 class="modal-title">Sao lưu cơ sở dữ liệu</h4>
+                        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                    </div>
+                    <div class="modal-body">
+                        <p>Bạn có chắc muốn sao lưu Database ?</p>
+                    </div>
+                    <div class="modal-footer">
+                        <input type="button" class="btn btn-facebook" data-dismiss="modal" value="Huỷ">
+                        <input id="btnSaoLuu" type="submit" class="btn btn-danger" value="Sao Lưu">
+                    </div>
+                }
+            }
+        </div>
+    </div>
+</div>

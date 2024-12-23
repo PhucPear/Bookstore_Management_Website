@@ -1,0 +1,138 @@
+﻿@model Website_QuanLyNhaSachNguyenVanCu.Areas.Admin.Models.QuanLyThongTin
+@using PagedList.Mvc;
+@{
+    ViewBag.Title = "QuanTriDanhMuc";
+    Layout = "~/Areas/Admin/Views/Shared/Admin_LayoutPage.cshtml";
+}
+<div id="myAlert" class="alert @TempData["LoaiTB"]" style="display:@(TempData["ht"] == null ? "none" : @TempData["ht"]); text-align:center; font-size:large;">
+    @TempData["ThongBao"]
+</div>
+<div class="container-xl">
+    <div class="table-responsive">
+        <div class="table-wrapper" style="width:1000px;">
+            <div class="table-title">
+                <div class="row">
+                    <div class="col-sm-6">
+                        <h2><a href="@Url.Action("QuanTriDanhMuc", "AdminSanPham")">Quản lý <b>Danh mục</b></a></h2>
+                    </div>
+                    <form method="post" class="d-none d-sm-inline-block form-inline mr-auto ml-md-3 my-2 my-md-0 mw-100 navbar-search" action="/Admin/AdminSanPham/SearchDanhMuc">
+                        <div class="input-group">
+                            <input type="text" name="searchDM" class="form-control bg-light border-0 small" spellcheck="false" placeholder="Nhập danh mục..."
+                                   aria-label="Search" aria-describedby="basic-addon2">
+                            <div class="input-group-append">
+                                <button class="btn btn-primary" type="submit">
+                                    <i class="fas fa-search fa-sm"></i>
+                                </button>
+                            </div>
+                        </div>
+                    </form>
+                    <div style="padding-top:4px; padding-right:4px;">
+                        <a href="#addEmployeeModal" class="btn btn-success" style="font-size:medium; font-weight:bold;" data-toggle="modal">Thêm Danh Mục</a>
+                    </div>
+                </div>
+            </div>
+            <table class="table table-striped table-hover text-center">
+                <thead>
+                    <tr>
+                        <th style="width:14%">Mã danh mục</th>
+                        <th style="width:50%">Tên danh mục</th>
+                        <th style="width:10%">Tác vụ</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @{
+                        foreach (var item in Model.PLDanhMuc)
+                        {
+                            <tr>
+                                <td>@Html.DisplayFor(i => item.MaDanhMuc)</td>
+                                <td>@Html.DisplayFor(i => item.TenDanhMuc)</td>
+                                <td>
+                                    <a href="#" data-target="#editEmployeeModal" class="edit" data-toggle="modal" data-id="@item.MaDanhMuc">Sửa</a>
+                                    &nbsp;&nbsp;&nbsp;
+                                    <a href="#" data-target="#deleteEmployeeModal" class="delete" data-toggle="modal" data-id="@item.MaDanhMuc">Xoá</a>
+                                </td>
+                            </tr>
+                        }
+                    }
+                </tbody>
+            </table>
+            <div class="col-md-12 d-flex justify-content-center">
+                <div style="font-size:22px;">
+                    @Html.PagedListPager(Model.PLDanhMuc, page => Url.Action("QuanTriDanhMuc", new { page }))
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- Them Danh Muc -->
+<div id="addEmployeeModal" class="modal fade">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            @using (Html.BeginForm("ThemDanhMuc", "AdminSanPham"))
+            {
+                <div class="modal-header">
+                    <h4 class="modal-title">Thêm danh mục</h4>
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                </div>
+                <div class="modal-body">
+                    <div class="form-group">
+                        <label>Tên danh mục</label>
+                        <input type="text" name="tenDM" class="form-control" spellcheck="false">
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <input type="button" class="btn btn-facebook" data-dismiss="modal" value="Huỷ">
+                    <input type="submit" class="btn btn-success" value="Thêm">
+                </div>
+            }
+        </div>
+    </div>
+</div>
+<!-- Sua Danh Muc -->
+<div id="editEmployeeModal" class="modal fade">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            @using (Html.BeginForm("SuaDanhMuc", "AdminSanPham", FormMethod.Post))
+            {
+                <div class="modal-header">
+                    <h4 class="modal-title">Sửa danh mục</h4>
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                </div>
+                <div class="modal-body">
+                    <div class="form-group">
+                        <label>Tên danh mục</label>
+                        <input type="text" class="form-control" name="tenDM" spellcheck="false">
+                    </div>
+                </div>
+                <input type="hidden" id="maSua" name="maDanhMuc" />
+                <div class="modal-footer">
+                    <input type="button" class="btn btn-facebook" data-dismiss="modal" value="Huỷ">
+                    <input type="submit" class="btn btn-info" value="Lưu">
+                </div>
+            }
+        </div>
+    </div>
+</div>
+<!-- Xoa Danh Muc -->
+<div id="deleteEmployeeModal" class="modal fade">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            @using (Html.BeginForm("XoaDanhMuc", "AdminSanPham", FormMethod.Post))
+            {
+                <div class="modal-header">
+                    <h4 class="modal-title">Xoá danh mục</h4>
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                </div>
+                <div class="modal-body">
+                    <p>Bạn có chắc muốn xoá danh mục này ?</p>
+                </div>
+                <input type="hidden" id="maXoa" name="maDanhMuc" />
+                <div class="modal-footer">
+                    <input type="button" class="btn btn-facebook" data-dismiss="modal" value="Huỷ">
+                    <input type="submit" class="btn btn-danger" value="Xoá">
+                </div>
+            }
+        </div>
+    </div>
+</div>
+

@@ -1,0 +1,32 @@
+﻿@{
+    ViewBag.Title = "XacNhanThanhToan";
+    Layout = "~/Views/Shared/TrangChu_LayoutPage.cshtml";
+}
+<div class="container-fluid  mt-100" style="padding:20%">
+    <div class="row">
+        <div class="col-md-12">
+            <div class="card">
+                <div class="card-body cart">
+                    <div class="col-sm-12 empty-cart-cls text-center">
+                        <img src="~/assets/user/images/shopping-cart.png" width="130" height="130" class="img-fluid mb-4 mr-3">
+                        <br /><br />
+                        @{
+                            if (ViewBag.NoiDung != null)
+                            {
+                                <h3><strong>@ViewBag.TrangThai</strong></h3>
+                                <br />
+                                <a href="@Url.Action("DanhSachDonHang", "KhachHang")" class="btn btn-info cart-btn-transform" style="font-size:large">XEM ĐƠN HÀNG</a>
+                                <a href="@Url.Action("TrangChu", "Home")" class="btn btn-success cart-btn-transform" style="font-size:large; margin-left:20px;">TIẾP TỤC MUA SẮM</a>
+                            }
+                            else
+                            {
+                                <h3><strong>@ViewBag.TrangThai</strong></h3>
+                            }
+                        }
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+

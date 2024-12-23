@@ -1,0 +1,87 @@
+﻿@model Website_QuanLyNhaSachNguyenVanCu.Areas.Admin.Models.QuanLyThongTin
+@using PagedList.Mvc;
+@{
+    ViewBag.Title = "LocSanPham";
+    Layout = "~/Areas/Admin/Views/Shared/Admin_LayoutPage.cshtml";
+}
+<div style="margin-left:16px">
+    <div class="table-responsive">
+        <div class="table-wrapper" style="width:1600px;">
+            <div class="table-title">
+                <div class="row">
+                    <div class="col-sm-6">
+                        <h2><a href="@Url.Action("ListSanPham", "ThongKe")">Thống kê <b>Sản phẩm</b></a></h2>
+                    </div>
+
+                </div>
+
+                <div class="row">
+                    <form method="post" class="d-none d-sm-inline-block form-inline ml-md-3 my-2 my-md-0 navbar-search" action="/Admin/AdminSanPham/SearchDanhMuc">
+                        <div class="input-group">
+                            <input type="text" name="searchSP" class="form-control bg-light border-0" style="width:300px;" spellcheck="false" placeholder="Nhập mã sản phẩm, tên sản phẩm..."
+                                   aria-label="Search" aria-describedby="basic-addon2">
+                            <div class="input-group-append">
+                                <button class="btn btn-primary" type="submit">
+                                    <i class="fas fa-search fa-sm"></i>
+                                </button>
+                            </div>
+                        </div>
+                    </form>
+                    <h4 style="margin-left:200px; font-weight:bold;">Lọc theo danh mục:</h4>
+                    &nbsp;&nbsp;&nbsp;
+                    @{
+                        using (Html.BeginForm("LocSanPham", "ThongKe", FormMethod.Post))
+                        {
+                            <div style="display:flex; margin-left:8px">
+                                <select style="width:200px" class="form-control" id="danhMuc" name="danhMuc">
+                                    <option value="0">Tất Cả</option>
+                                    @foreach (var item in Model.dsDanhMuc)
+                                    {
+                                        <option value="@item.MaDanhMuc">@Html.DisplayFor(i => item.TenDanhMuc)</option>
+                                    }
+                                </select>
+                                <input type="hidden" id="ma" name="ma" value="@Model.dsDanhMuc.FirstOrDefault().MaDanhMuc" />
+                                <input type="submit" class="btn btn-info" style="font-size:medium; font-weight:bold;" value="Lọc">
+                                <a href="@Url.Action("ThongKeSoLuongTonSach", "ThongKe", new { @maDM = (ViewBag.ma == null) ? 0 : ViewBag.ma })" class="btn btn-danger" style="margin-left:130px; font-size:medium; font-weight:bold;">Tạo Báo Cáo</a>
+                            </div>
+                        }
+                    }
+                </div>
+            </div>
+            <table class="table table-striped table-hover text-center">
+                <thead>
+                    <tr>
+                        <th style="width:10%">Mã sản phẩm</th>
+                        <th style="width:20%">Loại sản phẩm</th>
+                        <th style="width:40%">Tên sản phẩm</th>
+                        <th style="width:10%">Đơn giá</th>
+                        <th style="width:10%">Số lượng tồn</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @{
+                        foreach (var item in Model.PLSanPham)
+                        {
+                            <tr>
+                                <td>@Html.DisplayFor(i => item.MaSanPham)</td>
+                                <td>@Html.DisplayFor(i => item.LOAISANPHAM.TenLoaiSP)</td>
+                                <td>@Html.DisplayFor(i => item.TenSanPham)</td>
+                                <td>@string.Format("{0:0.000}", item.DonGia) đ</td>
+                                <td>@Html.DisplayFor(i => item.SoLuongTon)</td>
+                            </tr>
+                        }
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+<div class="container">
+    <div class="row">
+        <div class="col-md-12 d-flex justify-content-center">
+            <div style="font-size:22px;">
+                @Html.PagedListPager(Model.PLSanPham, page => Url.Action("LocSanPham", new { page, @ma = ViewBag.ma }))
+            </div>
+        </div>
+    </div>
+</div>

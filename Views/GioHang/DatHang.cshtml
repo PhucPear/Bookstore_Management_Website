@@ -1,0 +1,87 @@
+﻿@model List<Website_QuanLyNhaSachNguyenVanCu.Models.GIOHANG>
+@using Website_QuanLyNhaSachNguyenVanCu.Models;
+@{
+    ViewBag.Title = "DatHang";
+    Layout = "~/Views/Shared/TrangChu_LayoutPage.cshtml";
+}
+<div class="container" style="margin-top:15%; padding-bottom:4%">
+    <div class="py-5 text-center">
+        <h2>Thông Tin Giao Hàng</h2>
+    </div>
+    <div class="row" style="font-size:medium">
+        <div class="col-md-8 order-md-1">
+            <h3 class="mb-3">Địa Chỉ Giao Hàng</h3>
+            @{
+                KHACHHANG k = (KHACHHANG)Session["TaiKhoan"];
+            }
+            @using (Html.BeginForm())
+            {
+                @Html.ValidationSummary(true)
+                {
+                    <div class="row">
+                        <div class="col-md-6 mb-3">
+                            <label for="hoTen">Họ tên người nhận</label>
+                            <input type="text" class="form-control" id="hoTen" placeholder="Nhập họ tên người nhận" value="@k.TenKhachHang" spellcheck="false" readonly>
+                        </div>
+                    </div>
+                    <br />
+                    <div class="mb-3">
+                        <label for="address">Địa chỉ nhận hàng</label>
+                        <input type="text" class="form-control" id="address" name="dcGiaoHang" placeholder="Nhập địa chỉ nhận hàng" spellcheck="false" value="@k.DiaChi">
+                    </div>
+                    <br />
+                    <div class="mb-3">
+                        <label for="sdt">Số điện thoại người nhận</label>
+                        <input type="text" class="form-control" id="sdt" name="soDT" placeholder="Nhập số điện thoại" value="@k.SDT">
+                    </div>
+                    <br />
+                    <h4 class="mb-3">Vui lòng chọn phương thức thanh toán:</h4>
+                    <div class="d-block my-3" style="font-size:large">
+                        <div class="mb-1">
+                            <label><input type="radio" name="typePayment" class="iradio_flat-blue" value="0" checked>  Thanh Toán Khi Nhận Hàng</label><br />
+                        </div>
+                        <div class="mb-1">
+                            <label><input type="radio" class="iradio_flat-blue" name="typePayment" value="4" /> Cổng thanh toán VNPAYQR <img src="~/assets/user/images/logo-vnpay-qr.png" style="height:40px; margin-left:10px;" alt=""></label><br />
+                            <label><input type="radio" class="iradio_flat-blue" name="typePayment" value="2" /> ATM-Tài khoản ngân hàng nội địa </label><br />
+                            <label><input type="radio" class="iradio_flat-blue" name="typePayment" value="3" /> Thanh toán qua thẻ quốc tế </label><br />
+                        </div>
+                    </div>
+                    <button class="btn btn-primary btn-lg btn-block" id="btnDatHang" type="submit">Thanh Toán</button>
+                }
+            }
+        </div>
+
+        <div class="col-md-4 order-md-2 mb-4">
+            <h3 class="d-flex justify-content-between align-items-center mb-3">
+                <span class="text-muted">Giỏ Hàng Của Bạn</span>
+                <span class="badge badge-secondary badge-pill">@ViewBag.SoLuongSP</span>
+            </h3>
+            <ul class="list-group mb-3 sticky-top">
+                @{
+                    foreach (var item in Model)
+                    {
+                        <li class="list-group-item d-flex justify-content-between lh-condensed" style="height:140px; padding:4%;">
+                            <div style="float:right;">
+                                <img src="~/assets/user/images/sach/@Html.DisplayFor(itemSP => item.SANPHAM.HinhAnh)" alt="Product Image" class="mr-3" width="70" height="50">
+                            </div>
+                            <div>
+                                <h6 class="my-0">@Html.DisplayFor(itemSP => item.SANPHAM.TenSanPham)</h6>
+                                @{var dgKM = item.SANPHAM.DonGia - item.SANPHAM.DonGia * item.SANPHAM.KHUYENMAI.TiLe;}
+                                <small class="text-muted">@string.Format("{0:0.000}", dgKM) đ x @Html.DisplayFor(itemSP => item.SoLuong)</small>
+                            </div>
+                            @{var tt = dgKM * item.SoLuong;}
+                            <span class="text-muted">@string.Format("{0:0.000}", tt) đ</span>
+                        </li>
+                    }
+                    <li class="list-group-item d-flex justify-content-between">
+                        <h4>
+                            <span>Tổng thành tiền: </span>
+                            <strong style="text-transform: none; font-size:x-large; color:orangered">@string.Format("{0:0.000}", @ViewBag.TongTT) đ</strong>
+                        </h4>
+                    </li>
+                }
+            </ul>
+        </div>
+    </div>
+</div>
+

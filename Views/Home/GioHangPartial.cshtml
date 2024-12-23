@@ -1,0 +1,23 @@
+﻿@using Website_QuanLyNhaSachNguyenVanCu.Models;
+@{
+    KHACHHANG k = (KHACHHANG)Session["TaiKhoan"];
+    if (k != null)
+    {
+        <div class="tg-wishlistdropdown">
+            <a style="font-size:large;" href="@Url.Action("KiemTraSLTrongGioHang", "GioHang")" class="tg-btnthemedropdown" aria-haspopup="true" aria-expanded="false">
+                <span class="tg-themebadge" id="slCart">@ViewBag.SoLuongSP</span>
+                <i class="icon-cart" style="font-size:x-large;"></i>
+                <span>Giỏ Hàng</span>
+            </a>
+        </div>
+    }
+    else
+    {//Ve Trang Dang Nhap
+        <div class="tg-wishlistdropdown">
+            <a style="font-size:large;" href="@Url.Action("DangNhap", "KhachHang")" class="tg-btnthemedropdown" aria-haspopup="true" aria-expanded="false">
+                <i class="icon-cart" style="font-size:x-large;"></i>
+                <span>Giỏ Hàng</span>
+            </a>
+        </div>
+    }
+}

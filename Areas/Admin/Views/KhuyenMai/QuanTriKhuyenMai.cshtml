@@ -1,0 +1,248 @@
+﻿@model Website_QuanLyNhaSachNguyenVanCu.Areas.Admin.Models.QuanLyThongTin
+@using PagedList.Mvc;
+@{
+    ViewBag.Title = "QuanTriKhuyenMai";
+    Layout = "~/Areas/Admin/Views/Shared/Admin_LayoutPage.cshtml";
+}
+<div id="myAlert" class="alert @TempData["LoaiTB"]" style="display:@(TempData["ht"] == null ? "none" : @TempData["ht"]); text-align:center; font-size:large;">
+    @TempData["ThongBao"]
+</div>
+<div style="padding-left:10%">
+    <div class="table-responsive">
+        <div class="table-wrapper" style="width:1300px;">
+            <div class="table-title">
+                <div class="row">
+                    <div class="col-sm-6">
+                        <h2><a href="@Url.Action("QuanTriKhuyenMai", "KhuyenMai")">Quản lý <b>Khuyến mãi </b></a></h2>
+                    </div>
+
+                    <form method="post" class="d-none d-sm-inline-block form-inline mr-auto ml-md-3 my-2 my-md-0 mw-100 navbar-search" action="/Admin/KhuyenMai/SearchKhuyenMai">
+                        <div class="input-group">
+                            <input type="text" name="searchKM" class="form-control bg-light border-0 small" spellcheck="false" placeholder="Nhập khuyến mãi..."
+                                   aria-label="Search" aria-describedby="basic-addon2">
+                            <div class="input-group-append">
+                                <button class="btn btn-primary" type="submit">
+                                    <i class="fas fa-search fa-sm"></i>
+                                </button>
+                            </div>
+                        </div>
+                    </form>
+                    <div style="padding-top:4px; padding-right:4px;">
+                        <a href="#addEmployeeModal" class="btn btn-success" style="font-size:medium; font-weight:bold;" data-toggle="modal">Thêm Khuyến Mãi</a>
+                    </div>
+                </div>               
+            </div>
+            <table class="table table-striped table-hover text-center">
+                <thead>
+                    <tr>
+                        <th style="width:12%">Mã khuyến mãi</th>
+                        <th style="width:30%">Tên chương trình</th>
+                        <th style="width:14%">Phần trăm</th>
+                        <th style="width:14%">Thời gian bắt đầu</th>
+                        <th style="width:14%">Thời gian kết thúc</th>
+                        <th style="width:10%">Tác vụ</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @{
+                        foreach (var item in Model.PLKhuyenMai)
+                        {
+                            <tr>
+                                <td>@Html.DisplayFor(i => item.MaKhuyenMai)</td>
+                                <td>@Html.DisplayFor(i => item.TenChuongTrinhKM)</td>
+                                @{var pt = item.TiLe * 100;}
+                                <td>@string.Format("{0:0}", pt) %</td>
+                                <td>@item.TGBatDau.Value.ToString("dd/MM/yyyy HH:mm")</td>
+                                <td>@item.TGKetThuc.Value.ToString("dd/MM/yyyy HH:mm")</td>
+                                <td>
+                                    <a href="#editEmployeeModal" class="edit" data-toggle="modal" data-id="@item.MaKhuyenMai">Sửa</a>
+                                </td>
+                            </tr>
+                        }
+                    }
+                </tbody>
+            </table>
+            <div class="col-md-12 d-flex justify-content-center">
+                <div style="font-size:22px;">
+                    @Html.PagedListPager(Model.PLKhuyenMai, page => Url.Action("QuanTriKhuyenMai", new { page }))
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- Sua Khuyen Mai -->
+<div id="editEmployeeModal" class="modal fade">
+    <div class="modal-dialog" style="padding-left:13%; display:grid; justify-content:center;">
+        <div class="modal-content" style="width:1600px; background-color:#B9D3EE;">
+            @{
+                using (Html.BeginForm("SuaKhuyenMai", "KhuyenMai", FormMethod.Post))
+                {
+                    <div class="modal-header" style="background-color:#ecf0f1">
+                        <h4 class="modal-title">Sửa thông tin khuyến mãi</h4>
+                        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                    </div>
+                    <div class="modal-body">
+
+                        <div class="form-row">
+                            <div class="form-group col-md-12">
+                                <label for="tenKM">Tên Chương Trình</label>
+                                <input type="text" class="form-control" id="tenKM" spellcheck="false" name="tenKM">
+                            </div>
+                        </div>
+
+                        <div class="form-row">
+                            <div class="form-group col-md-6">
+                                <label for="tgBD">Thời Gian Bắt Đầu</label>
+                                <input type="datetime-local" class="form-control" id="tgBD" spellcheck="false" name="tgBD">
+                            </div>
+                            <div class="form-group col-md-6">
+                                <label for="tgKT">Thời Gian Kết Thúc</label>
+                                <input type="datetime-local" class="form-control" id="tgKT" spellcheck="false" name="tgKT">
+                            </div>
+                        </div>
+
+                        <div class="form-row">
+                            <div class="form-group col-md-6">
+                                <label for="tile">Tỉ Lệ Khuyến Mãi</label>
+                                <select class="form-control" id="maTacGia" name="tile">
+                                    <option value="0,05">Mặc Định</option>
+                                    <option value="0,1">10 %</option>
+                                    <option value="0,15">15 %</option>
+                                    <option value="0,2">20 %</option>
+                                    <option value="0,25">25 %</option>
+                                    <option value="0,3">30 %</option>
+                                </select>
+                            </div>
+                        </div>
+
+                    </div>
+
+                    <input type="hidden" id="maSua" name="maKM" />
+                    <div class="modal-footer">
+                        <input type="button" class="btn btn-facebook" data-dismiss="modal" value="Huỷ">
+                        <input type="submit" class="btn btn-info" id="suaSP" value="Sửa" onclick="luuFileAnh('hinhAnhE')">
+                    </div>
+                }
+            }
+        </div>
+    </div>
+</div>
+<!-- Them Khuyen Mai -->
+<div id="addEmployeeModal" class="modal fade">
+    <div class="modal-dialog" style="padding-left:13%; display:grid; justify-content:center;">
+        <div class="modal-content" style="width:1600px; background-color:#B9D3EE;">
+            @{
+                using (Html.BeginForm("ThemKhuyenMai", "KhuyenMai", FormMethod.Post))
+                {
+                    <div class="modal-header" style="background-color:#ecf0f1;">
+                        <h4 class="modal-title">Thêm khuyến mãi</h4>
+                        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                    </div>
+                    <div class="modal-body">
+
+                        <div class="form-row">
+                            <div class="form-group col-md-12">
+                                <label for="tenKM">Tên Chương Trình</label>
+                                <input type="text" class="form-control" id="tenKM" spellcheck="false" name="tenKM">
+                            </div>
+                        </div>
+
+                        <div class="form-row">
+                            <div class="form-group col-md-6">
+                                <label for="tgBD">Thời Gian Bắt Đầu</label>
+                                <input type="datetime-local" class="form-control" id="tgBD" name="tgBD">
+                            </div>
+                            <div class="form-group col-md-6">
+                                <label for="tgKT">Thời Gian Kết Thúc</label>
+                                <input type="datetime-local" class="form-control" id="tgKT" name="tgKT">
+                            </div>
+                        </div>
+
+                        <div class="form-row">
+                            <div class="form-group col-md-6">
+                                <label for="tile">Tỉ Lệ Khuyến Mãi</label>
+                                <select class="form-control" id="maTacGia" name="tile">
+                                    <option value="0,05">Mặc Định</option>
+                                    <option value="0,1">10 %</option>
+                                    <option value="0,15">15 %</option>
+                                    <option value="0,2">20 %</option>
+                                    <option value="0,25">25 %</option>
+                                    <option value="0,3">30 %</option>
+                                </select>
+                            </div>
+                        </div>
+
+                    </div>
+
+                    <div class="modal-footer">
+                        <input type="button" class="btn btn-facebook" data-dismiss="modal" value="Huỷ">
+                        <input type="submit" class="btn btn-success" value="Thêm">
+                    </div>
+                }
+            }
+        </div>
+    </div>
+</div>
+<!-- Thiet Lap Khuyen Mai -->
+<div id="deleteEmployeeModal" class="modal fade">
+    <div class="modal-dialog" style="padding-left:13%; display:grid; justify-content:center;">
+        <div class="modal-content" style="width:1600px; background-color:#B9D3EE;">
+            @{
+                using (Html.BeginForm("SuaSanPham", "AdminSanPham", FormMethod.Post))
+                {
+                    <div class="modal-header" style="background-color:#ecf0f1">
+                        <h4 class="modal-title">Thiết Lập Khuyến Mãi Cho Sản Phẩm</h4>
+                        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                    </div>
+                    <div class="modal-body">
+
+                        <div class="form-row">
+                            <div class="form-group col-md-12">
+                                <label for="tenSanPham">Tên Sản Phẩm</label>
+                                <input type="text" class="form-control" id="tenSanPham" spellcheck="false" name="tenSP">
+                            </div>
+                        </div>
+
+                        <div class="form-row">
+                            <div class="form-group col-md-6">
+                                <label for="tenSanPham">Đơn Giá</label>
+                                <input type="number" class="form-control" id="tenSanPham" spellcheck="false" name="donGia">
+                            </div>
+                            <div class="form-group col-md-6">
+                                <label for="donGia">Số Lượng Tồn</label>
+                                <input type="number" class="form-control" id="donGia" spellcheck="false" name="slTon">
+                            </div>
+                        </div>
+                        <div class="form-row">
+                            <div class="form-group col-md-6">
+                                <label for="hinhAnhE">Hình Ảnh</label>
+                                <div class="custom-file">
+                                    <input type="file" class="custom-file-input" id="hinhAnhE" name="hinhAnh" accept="image/*" onchange="layTenFileAnh('hinhAnhE','tenAnhE')">
+                                    <label class="custom-file-label" id="tenAnhE" for="hinhAnhE">Chọn file ảnh</label>
+                                </div>
+                            </div>
+                            <div class="form-group col-md-6">
+                                <label for="namXB">Năm Xuất Bản</label>
+                                <input type="number" class="form-control" id="nxb" spellcheck="false" name="namXB">
+                            </div>
+                        </div>
+
+                        <div class="form-row">
+                            <div class="form-group col-md-12">
+                                <label for="moTa">Mô Tả Sản Phẩm</label>
+                                <textarea type="text" class="form-control" rows="5" spellcheck="false" name="moTa"></textarea>
+                            </div>
+                        </div>
+
+                    </div>
+
+                    <input type="hidden" id="maSua" name="maSanPham" />
+                    <div class="modal-footer">
+                        <input type="button" class="btn btn-facebook" data-dismiss="modal" value="Huỷ">
+                        <input type="submit" class="btn btn-info" id="suaSP" value="Sửa" onclick="luuFileAnh('hinhAnhE')">
+                    </div>
+                }
+            }
+        </div>
+    </div>
+</div>

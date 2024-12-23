@@ -1,0 +1,96 @@
+﻿@model Website_QuanLyNhaSachNguyenVanCu.Areas.Admin.Models.QuanLyThongTin
+@using PagedList.Mvc;
+@{
+    ViewBag.Title = "SearchBanHang";
+    Layout = "~/Areas/Admin/Views/Shared/Admin_LayoutPage.cshtml";
+}
+<div style="margin-left:16px">
+    <div class="table-responsive">
+        <div class="table-wrapper" style="width:1600px;">
+            <div class="table-title">
+                <div class="row">
+                    <div class="col-sm-6">
+                        <h2><a href="@Url.Action("QuanLyBanHang", "ThongKe")">Thống kê <b>Bán hàng</b></a></h2>
+                    </div>
+
+                </div>
+
+                <div class="row">
+                    <form method="post" class="d-none d-sm-inline-block form-inline ml-md-3 my-2 my-md-0 navbar-search" action="/Admin/ThongKe/SearchBanHang">
+                        <div class="input-group">
+                            <input type="text" name="searchBH" class="form-control bg-light border-0" style="width:300px;" spellcheck="false" placeholder="Nhập mã đơn hàng, tên khách hàng..."
+                                   aria-label="Search" aria-describedby="basic-addon2">
+                            <div class="input-group-append">
+                                <button class="btn btn-primary" type="submit">
+                                    <i class="fas fa-search fa-sm"></i>
+                                </button>
+                            </div>
+                        </div>
+                    </form>
+
+                    <h4 style="margin-left:200px; font-weight:bold;">Lọc thời gian:</h4>
+                    @{
+                        using (Html.BeginForm("LocBanHang", "ThongKe", new { @pt = (ViewBag.Time == null) ? "1000-01-01" : ViewBag.Time, @loc = ViewBag.Loc }, FormMethod.Post))
+                        {
+                            <div style="display:flex; margin-left:10px">
+                                <input type="date" name="thoiGian">
+                                <h4 style="margin-left:14px; font-weight:bold;">Theo:</h4>
+                                <select style="width:100px; margin-left:10px;" class="form-control" name="filter">
+                                    <option value="yy">Năm</option>
+                                    <option value="qq">Quý</option>
+                                    <option value="mm">Tháng</option>
+                                    <option value="dd">Ngày</option>
+                                </select>
+                                <input type="submit" class="btn btn-info" style="font-size:medium; margin-left:20px; font-weight:bold;" value="Lọc">
+                                <a href="@Url.Action("ThongKeDoanhThuBanHang", "ThongKe", new { @date = "1000-01-01", @locTheo = "all" })" class="btn btn-danger" style="margin-left:130px; font-size:medium; font-weight:bold;">Tạo Báo Cáo</a>
+                            </div>
+                        }
+                    }
+                </div>
+            </div>
+            <table class="table table-striped table-hover text-center">
+                <thead>
+                    <tr>
+                        <th style="width:10%">Tên nhân viên</th>
+                        <th style="width:14%">Ngày bán hàng</th>
+                        <th style="width:14%">SDT Khách hàng</th>
+                        <th style="width:10%">Mã đơn hàng</th>
+                        <th style="width:14%">Trạng thái đơn hàng</th>
+                        <th style="width:10%">Kiểu thanh toán</th>
+                        <th style="width:10%">Doanh số</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @{
+                        foreach (var item in Model.PLDonHang)
+                        {
+                            <tr>
+                                <td>@Html.DisplayFor(i => item.NHANVIEN.TenNhanVien)</td>
+                                <td>@item.NgayDat.Value.ToString("dd/MM/yyyy")</td>
+                                <td>@Html.DisplayFor(i => item.KHACHHANG.SDT)</td>
+                                <td>@Html.DisplayFor(i => item.MaDonHang)</td>
+                                <td>@Html.DisplayFor(i => item.ThanhToan)</td>
+                                <td>@Html.DisplayFor(i => item.HinhThucTT)</td>
+                                <td>@string.Format("{0:0.000}", item.TongThanhTien) đ</td>
+                            </tr>
+                        }
+                    }
+                    <tr>
+                        <td colspan="4"></td>
+                        <td colspan="3" style="text-align:center; font-size:x-large; font-weight:bold; color:orangered">@Model.tongDoanhThu đ</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+<div class="container">
+    <div class="row">
+        <div class="col-md-12 d-flex justify-content-center">
+            <div style="font-size:22px;">
+                @Html.PagedListPager(Model.PLDonHang, page => Url.Action("SearchBanHang", new { page, @searchBH = ViewBag.Search }))
+            </div>
+        </div>
+    </div>
+</div>
+

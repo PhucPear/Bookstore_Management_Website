@@ -1,0 +1,39 @@
+﻿@media (min-width: 1025px) {
+    .h-custom {
+        height: 100vh !important;
+    }
+}
+
+.ui-autocomplete {
+    max-height: 200px;
+    max-width: 570px;
+    overflow-y: auto;
+    overflow-x: hidden;
+    padding: 5px;
+    border: 1px solid #ccc;
+}
+
+.product-item {
+    display: flex;
+    align-items: center;
+    font-weight: bold;
+    color: #007bff;
+    margin: 5px;
+}
+
+.product-image {
+    width: 20px;
+    height: 20px;
+    object-fit: cover;
+}
+
+.product-info {
+    flex-grow: 1;
+}
+
+.ui-menu-item {
+    cursor: pointer;
+    font-size: 16px;
+    margin: 8px 0;
+    line-height: 20px;
+}

@@ -1,0 +1,42 @@
+﻿@using Website_QuanLyNhaSachNguyenVanCu.Models;
+@{
+    NHANVIEN nv = (NHANVIEN)Session["TaiKhoan"];
+
+    if (nv != null)
+    {
+        <li class="nav-item dropdown no-arrow" style="margin-right:60px; font-weight:bold;">
+
+            <a class="nav-link dropdown-toggle" href="#" id="userDropdown" role="button"
+               data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                <span class="mr-2 d-none d-lg-inline text-gray-600 medium">Người dùng: @nv.TenNhanVien</span>
+            </a>
+            <!-- Dropdown - User Information -->
+            <div class="dropdown-menu dropdown-menu-right shadow animated--grow-in"
+                 aria-labelledby="userDropdown">
+
+                <a class="dropdown-item" href="#" data-toggle="modal" data-target="#logoutModal">
+                    <i class="fas fa-sign-out-alt fa-sm fa-fw mr-2 text-gray-400"></i>
+                    Đăng xuất
+                </a>
+            </div>
+        </li>    
+    }   
+    <!-- Logout Modal-->
+    <div class="modal fade" id="logoutModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+         aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel">Bạn có muốn đăng xuất ?</h5>
+                    <button class="close" type="button" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">×</span>
+                    </button>
+                </div>
+                <div class="modal-body">Nhấn đăng xuất để kết thúc phiên đăng nhập.</div>
+                <div class="modal-footer">
+                    <a class="btn btn-primary" href="@Url.Action("DangXuat", "AdminNguoiDung")">Đăng xuất</a>
+                </div>
+            </div>
+        </div>
+    </div>
+}

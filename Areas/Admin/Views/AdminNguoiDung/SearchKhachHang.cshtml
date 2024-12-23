@@ -1,0 +1,124 @@
+﻿@model Website_QuanLyNhaSachNguyenVanCu.Areas.Admin.Models.QuanLyThongTin
+@using PagedList.Mvc;
+@{
+    ViewBag.Title = "SearchKhachHang";
+    Layout = "~/Areas/Admin/Views/Shared/Admin_LayoutPage.cshtml";
+}
+<div style="margin-left:16px">
+    <div class="table-responsive">
+        <div class="table-wrapper" style="width:1600px;">
+            <div class="table-title">
+                <div class="row">
+                    <div class="col-sm-6">
+                        <h2><a href="@Url.Action("QuanTriKhachHang", "AdminNguoiDung")">Quản lý <b>Khách hàng</b></a></h2>
+                    </div>
+                    <form method="post" class="d-none d-sm-inline-block form-inline mr-auto ml-md-3 my-2 my-md-0 mw-100 navbar-search" action="/Admin/AdminNguoiDung/SearchKhachHang">
+                        <div class="input-group">
+                            <input type="text" name="searchKH" class="form-control bg-light border-0 small" spellcheck="false" placeholder="Tìm kiếm khách hàng..."
+                                   aria-label="Search" aria-describedby="basic-addon2">
+                            <div class="input-group-append">
+                                <button class="btn btn-primary" type="submit">
+                                    <i class="fas fa-search fa-sm"></i>
+                                </button>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+            <table class="table table-striped table-hover text-center">
+                <thead>
+                    <tr>
+                        <th style="width:7%">Mã khách hàng</th>
+                        <th style="width:18%">Tên khách hàng</th>
+                        <th style="width:10%">Ngày sinh</th>
+                        <th style="width:8%">Giới tính</th>
+                        <th style="width:12%">Số điện thoại</th>
+                        <th style="width:20%">Email</th>
+                        <th style="width:18%">Địa chỉ</th>
+                        <th style="width:14%">Tác vụ</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @{
+                        foreach (var item in Model.PLKhachHang)
+                        {
+                            <tr>
+                                <td>@Html.DisplayFor(i => item.MaKhachHang)</td>
+                                <td>@Html.DisplayFor(i => item.TenKhachHang)</td>
+                                <td>@item.NgaySinh.Value.ToString("dd/MM/yyyy")</td>
+                                <td>@Html.DisplayFor(i => item.GioiTinh)</td>
+                                <td>@Html.DisplayFor(i => item.SDT)</td>
+                                <td>@Html.DisplayFor(i => item.Email)</td>
+                                <td>@Html.DisplayFor(i => item.DiaChi)</td>
+                                <td>
+                                    @if (item.TrangThai.Equals("OPEN"))
+                                    {
+                                        <a href="#deleteEmployeeModal" class="delete" data-toggle="modal" data-id="@item.MaKhachHang">Khoá</a>
+                                    }
+                                    else
+                                    {
+                                        <a href="#addEmployeeModal" class="mo" data-toggle="modal" data-id="@item.MaKhachHang">Mở Khoá</a>
+                                    }
+                                </td>
+                            </tr>
+                        }
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+<div class="container">
+    <div class="row">
+        <div class="col-md-12 d-flex justify-content-center">
+            <div style="font-size:22px;">
+                @Html.PagedListPager(Model.PLKhachHang, page => Url.Action("SearchKhachHang", new { page, @searchKH = ViewBag.Search }))
+            </div>
+        </div>
+    </div>
+</div>
+<!-- Khoa Tai Khoan -->
+<div id="deleteEmployeeModal" class="modal fade">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            @using (Html.BeginForm("KhoaTKKhachHang", "AdminNguoiDung", FormMethod.Post))
+            {
+                <div class="modal-header">
+                    <h4 class="modal-title">Khoá tài khoản của Khách hàng</h4>
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                </div>
+                <div class="modal-body">
+                    <p>Bạn có chắc muốn khoá tài khoản này ?</p>
+                </div>
+                <input type="hidden" id="maXoa" name="maKhachHang" />
+                <div class="modal-footer">
+                    <input type="button" class="btn btn-facebook" data-dismiss="modal" value="Huỷ">
+                    <input id="btnXoa" type="submit" class="btn btn-danger" value="Khoá">
+                </div>
+            }
+        </div>
+    </div>
+</div>
+<!-- Mo Khoa Tai Khoan -->
+<div id="addEmployeeModal" class="modal fade">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            @using (Html.BeginForm("MoKhoaTKKhachHang", "AdminNguoiDung"))
+            {
+                <div class="modal-header">
+                    <h4 class="modal-title">Mở khoá tài khoản cho Khách hàng</h4>
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                </div>
+                <div class="modal-body">
+                    <p>Bạn có chắc muốn mở khoá cho tài khoản này ?</p>
+                </div>
+                <input type="hidden" id="maMo" name="maKhachHang" />
+                <div class="modal-footer">
+                    <input type="button" class="btn btn-facebook" data-dismiss="modal" value="Huỷ">
+                    <input id="btnXoa" type="submit" class="btn btn-danger" value="Mở Khoá">
+                </div>
+            }
+        </div>
+    </div>
+</div>
+

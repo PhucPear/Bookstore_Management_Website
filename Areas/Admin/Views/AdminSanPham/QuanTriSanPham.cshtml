@@ -1,0 +1,362 @@
+﻿@model Website_QuanLyNhaSachNguyenVanCu.Areas.Admin.Models.QuanLyThongTin
+@using PagedList.Mvc;
+@{
+    ViewBag.Title = "QuanTriSanPham";
+    Layout = "~/Areas/Admin/Views/Shared/Admin_LayoutPage.cshtml";
+}
+<div id="myAlert" class="alert @TempData["LoaiTB"]" style="display:@(TempData["ht"] == null ? "none" : @TempData["ht"]); text-align:center; font-size:large;">
+    @TempData["ThongBao"]
+</div>
+<div style="margin-left:16px">
+    <div class="table-responsive">
+        <div class="table-wrapper" style="width:1600px;">
+            <div class="table-title">
+                <div class="row">
+                    <div class="col-sm-6">
+                        <h2><a href="@Url.Action("QuanTriSanPham", "AdminSanPham")">Quản lý <b>Sản phẩm</b></a></h2>
+                    </div>
+                    <form method="post" class="d-none d-sm-inline-block form-inline mr-auto ml-md-3 my-2 my-md-0 mw-100 navbar-search" action="/Admin/AdminSanPham/SearchSanPham">
+                        <div class="input-group">
+                            <input type="text" name="searchSP" class="form-control bg-light border-0 small" style="width:300px;" spellcheck="false" placeholder="Tìm kiếm sản phẩm..."
+                                   aria-label="Search" aria-describedby="basic-addon2">
+                            <div class="input-group-append">
+                                <button class="btn btn-primary" type="submit">
+                                    <i class="fas fa-search fa-sm"></i>
+                                </button>
+                            </div>
+                        </div>
+                    </form>
+                    <div style="padding-top:4px; padding-right:20px;">
+                        <a href="#addEmployeeModal" class="btn btn-danger" style="font-size:medium; font-weight:bold;" data-toggle="modal">Thêm Sản Phẩm Mới</a>
+                    </div>
+                </div>
+
+                <div class="row" style="padding-top:1%;">
+                    <div style="margin-left:10px;">
+                        <a href="#addExcel" class="btn btn-success" style="font-size:medium; font-weight:bold;" data-toggle="modal">Nhập Sản Phẩm Bằng Excel</a>
+                    </div>
+                    <h4 style="margin-left:200px; font-weight:bold;">Lọc theo danh mục:</h4>
+                    &nbsp;&nbsp;&nbsp;
+                    @{
+                        using (Html.BeginForm("LocSanPham", "AdminSanPham", FormMethod.Post))
+                        {
+                            <div style="display:flex; margin-left:8px">
+                                <select style="width:200px" class="form-control" id="danhMuc" name="danhMuc">
+                                    <option value="0">Tất Cả</option>
+                                    @foreach (var item in Model.dsDanhMuc)
+                                    {
+                                        <option value="@item.MaDanhMuc">@Html.DisplayFor(i => item.TenDanhMuc)</option>
+                                    }
+                                </select>
+                                <input type="hidden" id="ma" name="ma" value="@Model.dsDanhMuc.FirstOrDefault().MaDanhMuc" />
+                                <input type="submit" class="btn btn-info" style="font-size:medium; font-weight:bold;" value="Lọc">
+                            </div>
+                        }
+                    }
+                </div>
+
+            </div>
+            <table class="table table-striped table-hover text-center">
+                <thead>
+                    <tr>
+                        <th style="width:8%">Mã sản phẩm</th>
+                        <th style="width:10%">Danh mục</th>
+                        <th style="width:12%">Loại sản phẩm</th>
+                        <th style="width:8%">Hình ảnh</th>
+                        <th style="width:26%">Tên sản phẩm</th>
+                        <th style="width:10%">Đơn giá</th>
+                        <th style="width:8%">Khuyến mãi</th>
+                        <th style="width:10%">Số lượng tồn</th>
+                        <th style="width:14%">Tác vụ</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @{
+                        foreach (var item in Model.PLSanPham)
+                        {
+                            <tr>
+                                <td>@Html.DisplayFor(i => item.MaSanPham)</td>
+                                <td>@Html.DisplayFor(i => item.LOAISANPHAM.DANHMUC.TenDanhMuc)</td>
+                                <td>@Html.DisplayFor(i => item.LOAISANPHAM.TenLoaiSP)</td>
+                                <td><img src="~/assets/user/images/sach/@Html.DisplayFor(itemSP => item.HinhAnh)" id="zoom-img" alt="Product Image" class="mr-3" width="70" height="60"></td>
+                                <td>@Html.DisplayFor(i => item.TenSanPham)</td>
+                                <td>@string.Format("{0:0.000}", item.DonGia) đ</td>
+                                @{var pt = item.KHUYENMAI.TiLe * 100;}
+                                <td>@string.Format("{0:0}", pt) %</td>
+                                <td>@Html.DisplayFor(i => item.SoLuongTon)</td>
+                                <td>
+                                    <a href="#editEmployeeModal" class="edit" data-toggle="modal" data-id="@item.MaSanPham">Sửa</a>
+                                    &nbsp;&nbsp;&nbsp;
+                                    <a href="#deleteEmployeeModal" class="delete" data-toggle="modal" data-id="@item.MaSanPham">Xoá</a>
+                                </td>
+                            </tr>
+                        }
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+<div class="container">
+    <div class="row">
+        <div class="col-md-12 d-flex justify-content-center">
+            <div style="font-size:22px;">
+                @Html.PagedListPager(Model.PLSanPham, page => Url.Action("QuanTriSanPham", new { page }))
+            </div>
+        </div>
+    </div>
+</div>
+<!-- Sua San Pham -->
+<div id="editEmployeeModal" class="modal fade">
+    <div class="modal-dialog" style="padding-left:13%; display:grid; justify-content:center;">
+        <div class="modal-content" style="width:1600px; background-color:#B9D3EE;">
+            @{
+                using (Html.BeginForm("SuaSanPham", "AdminSanPham", FormMethod.Post))
+                {
+                    <div class="modal-header" style="background-color:#ecf0f1">
+                        <h4 class="modal-title">Sửa sản phẩm</h4>
+                        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                    </div>
+                    <div class="modal-body">
+                        <div class="form-row">
+                            <div class="form-group col-md-6">
+                                <label for="maLoaiSP">Loại Sản Phẩm</label>
+                                <select class="form-control" id="maLoaiSP" name="loaiSP">
+                                    @foreach (var item in Model.dsLoaiSanPham)
+                                    {
+                                        <option value="@item.MaLoaiSP">@Html.DisplayFor(i => item.DANHMUC.TenDanhMuc): @Html.DisplayFor(i => item.TenLoaiSP)</option>
+                                    }
+                                </select>
+                            </div>
+                            <div class="form-group col-md-6">
+                                <label for="maTacGia">Tác Giả</label>
+                                <select class="form-control" id="maTacGia" name="tacGia">
+                                    @foreach (var item in Model.dsTacGia)
+                                    {
+                                        <option value="@item.MaTacGia">@Html.DisplayFor(i => item.TenTacGia)</option>
+                                    }
+                                </select>
+                            </div>
+                        </div>
+
+                        <div class="form-row">
+                            <div class="form-group col-md-6">
+                                <label for="maLoaiSP">Nhà Xuất Bản</label>
+                                <select class="form-control" id="maLoaiSP" name="NXB">
+                                    @foreach (var item in Model.dsNXB)
+                                    {
+                                        <option value="@item.MaNXB">@Html.DisplayFor(i => item.TenNXB)</option>
+                                    }
+                                </select>
+                            </div>
+                            <div class="form-group col-md-6">
+                                <label for="maTacGia">Khuyến Mãi</label>
+                                <select class="form-control" id="maTacGia" name="khuyenMai">
+                                    @foreach (var item in Model.dsKhuyenMai)
+                                    {
+                                        <option value="@item.MaKhuyenMai">@Html.DisplayFor(i => item.TenChuongTrinhKM)</option>
+                                    }
+                                </select>
+                            </div>
+                        </div>
+
+                        <div class="form-row">
+                            <div class="form-group col-md-12">
+                                <label for="tenSanPham">Tên Sản Phẩm</label>
+                                <input type="text" class="form-control" id="tenSanPham" spellcheck="false" name="tenSP">
+                            </div>
+                        </div>
+
+                        <div class="form-row">
+                            <div class="form-group col-md-6">
+                                <label for="tenSanPham">Đơn Giá</label>
+                                <input type="number" class="form-control" id="tenSanPham" spellcheck="false" name="donGia">
+                            </div>
+                            <div class="form-group col-md-6">
+                                <label for="donGia">Số Lượng Tồn</label>
+                                <input type="number" class="form-control" id="donGia" spellcheck="false" name="slTon">
+                            </div>
+                        </div>
+                        <div class="form-row">
+                            <div class="form-group col-md-6">
+                                <label for="hinhAnhE">Hình Ảnh</label>
+                                <div class="custom-file">
+                                    <input type="file" class="custom-file-input" id="hinhAnhE" name="hinhAnh" accept="image/*" onchange="layTenFileAnh('hinhAnhE','tenAnhE')">
+                                    <label class="custom-file-label" id="tenAnhE" for="hinhAnhE">Chọn file ảnh</label>
+                                </div>
+                            </div>
+                            <div class="form-group col-md-6">
+                                <label for="namXB">Năm Xuất Bản</label>
+                                <input type="number" class="form-control" id="nxb" spellcheck="false" name="namXB">
+                            </div>
+                        </div>
+
+                        <div class="form-row">
+                            <div class="form-group col-md-12">
+                                <label for="moTa">Mô Tả Sản Phẩm</label>
+                                <textarea type="text" class="form-control" rows="5" spellcheck="false" name="moTa"></textarea>
+                            </div>
+                        </div>
+
+                    </div>
+
+                    <input type="hidden" id="maSua" name="maSanPham" />
+                    <div class="modal-footer">
+                        <input type="button" class="btn btn-facebook" data-dismiss="modal" value="Huỷ">
+                        <input type="submit" class="btn btn-info" id="suaSP" value="Sửa" onclick="luuFileAnh('hinhAnhE')">
+                    </div>
+                }
+            }
+        </div>
+    </div>
+</div>
+<!-- Xoa San Pham -->
+<div id="deleteEmployeeModal" class="modal fade">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            @using (Html.BeginForm("XoaSanPham", "AdminSanPham", FormMethod.Post))
+            {
+                <div class="modal-header">
+                    <h4 class="modal-title">Xoá sản phẩm</h4>
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                </div>
+                <div class="modal-body">
+                    <p>Bạn có chắc muốn xoá sản phẩm này ?</p>
+                </div>
+                <input type="hidden" id="maXoa" name="maSanPham" />
+                <div class="modal-footer">
+                    <input type="button" class="btn btn-facebook" data-dismiss="modal" value="Huỷ">
+                    <input id="btnXoa" type="submit" class="btn btn-danger" value="Xoá">
+                </div>
+            }
+        </div>
+    </div>
+</div>
+<!-- Them San Pham -->
+<div id="addEmployeeModal" class="modal fade">
+    <div class="modal-dialog" style="padding-left:13%; display:grid; justify-content:center;">
+        <div class="modal-content" style="width:1600px; background-color:#B9D3EE;">
+            @{
+                using (Html.BeginForm("ThemSanPham", "AdminSanPham", FormMethod.Post))
+                {
+                    <div class="modal-header" style="background-color:#ecf0f1;">
+                        <h4 class="modal-title">Thêm sản phẩm</h4>
+                        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                    </div>
+                    <div class="modal-body">
+                        <div class="form-row">
+                            <div class="form-group col-md-6">
+                                <label for="maLoaiSP">Loại Sản Phẩm</label>
+                                <select class="form-control" id="maLoaiSP" name="loaiSP">
+                                    @foreach (var item in Model.dsLoaiSanPham)
+                                    {
+                                        <option value="@item.MaLoaiSP">@Html.DisplayFor(i => item.DANHMUC.TenDanhMuc): @Html.DisplayFor(i => item.TenLoaiSP)</option>
+                                    }
+                                </select>
+                            </div>
+                            <div class="form-group col-md-6">
+                                <label for="maTacGia">Tác Giả</label>
+                                <select class="form-control" id="maTacGia" name="tacGia">
+                                    @foreach (var item in Model.dsTacGia)
+                                    {
+                                        <option value="@item.MaTacGia">@Html.DisplayFor(i => item.TenTacGia)</option>
+                                    }
+                                </select>
+                            </div>
+                        </div>
+
+                        <div class="form-row">
+                            <div class="form-group col-md-6">
+                                <label for="maLoaiSP">Nhà Xuất Bản</label>
+                                <select class="form-control" id="maLoaiSP" name="NXB">
+                                    @foreach (var item in Model.dsNXB)
+                                    {
+                                        <option value="@item.MaNXB">@Html.DisplayFor(i => item.TenNXB)</option>
+                                    }
+                                </select>
+                            </div>
+                            <div class="form-group col-md-6">
+                                <label for="maTacGia">Khuyến Mãi</label>
+                                <select class="form-control" id="maTacGia" name="khuyenMai">
+                                    @foreach (var item in Model.dsKhuyenMai)
+                                    {
+                                        <option value="@item.MaKhuyenMai">@Html.DisplayFor(i => item.TenChuongTrinhKM)</option>
+                                    }
+                                </select>
+                            </div>
+                        </div>
+
+                        <div class="form-row">
+                            <div class="form-group col-md-12">
+                                <label for="tenSanPham">Tên Sản Phẩm</label>
+                                <input type="text" class="form-control" id="tenSanPham" spellcheck="false" name="tenSP">
+                            </div>
+                        </div>
+
+                        <div class="form-row">
+                            <div class="form-group col-md-6">
+                                <label for="tenSanPham">Đơn Giá</label>
+                                <input type="number" class="form-control" id="tenSanPham" spellcheck="false" name="donGia">
+                            </div>
+                            <div class="form-group col-md-6">
+                                <label for="donGia">Số Lượng Tồn</label>
+                                <input type="number" class="form-control" id="donGia" spellcheck="false" name="slTon">
+                            </div>
+                        </div>
+
+                        <div class="form-row">
+                            <div class="form-group col-md-6">
+                                <label for="hinhAnhN">Hình Ảnh</label>
+                                <div class="custom-file">
+                                    <input type="file" class="custom-file-input" id="hinhAnhN" name="hinhAnh" accept="image/*" onchange="layTenFileAnh('hinhAnhN','tenAnhN')">
+                                    <label class="custom-file-label" id="tenAnhN" for="hinhAnhN">Chọn file ảnh</label>
+                                </div>
+                            </div>
+                            <div class="form-group col-md-6">
+                                <label for="namXB">Năm Xuất Bản</label>
+                                <input type="number" class="form-control" id="nxb" spellcheck="false" name="namXB">
+                            </div>
+                        </div>
+
+                        <div class="form-row">
+                            <div class="form-group col-md-12">
+                                <label for="moTa">Mô Tả Sản Phẩm</label>
+                                <textarea type="text" class="form-control" rows="5" spellcheck="false" name="moTa"></textarea>
+                            </div>
+                        </div>
+
+                    </div>
+
+                    <div class="modal-footer">
+                        <input type="button" class="btn btn-facebook" data-dismiss="modal" value="Huỷ">
+                        <input type="submit" class="btn btn-success" value="Thêm" onclick="luuFileAnh('hinhAnhN')">
+                    </div>
+                }
+            }
+        </div>
+    </div>
+</div>
+
+<!-- Nhap San Pham Bang Excel -->
+<div id="addExcel" class="modal fade">
+    <div class="modal-dialog" style="padding-top:10%; padding-left:6%; display:grid; justify-content:center;">
+        <div class="modal-content" style="width:800px;">
+            <div class="modal-header">
+                <h4 class="modal-title">Nhập sản phẩm bằng excel</h4>
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+            </div>
+            <div class="modal-body" style="background-color: #B9D3EE;">
+                <div class="custom-file">
+                    <input type="file" class="custom-file-input" id="fileExcel" name="fileExcel" accept=".xls, .xlsx" onchange="layTenFile('fileExcel', 'nameExcel')">
+                    <label class="custom-file-label" id="nameExcel" for="fileExcel">Chọn file excel chứa các sản phẩm cần nhập</label>
+                </div>
+                <div id="fileAlert" class="alert" style="display:none;">
+                </div>
+            </div>
+            <div class="modal-footer">
+                <input type="button" class="btn btn-danger" data-dismiss="modal" value="Huỷ">
+                <input id="btnNhap" type="submit" class="btn btn-success" value="Nhập sản phẩm">
+            </div>
+        </div>
+    </div>
+</div>

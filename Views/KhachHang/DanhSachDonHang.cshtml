@@ -1,0 +1,377 @@
+﻿@model Website_QuanLyNhaSachNguyenVanCu.Models.DanhSachDonHang
+@using Website_QuanLyNhaSachNguyenVanCu.Controllers
+@{
+    ViewBag.Title = "DanhSachDonHang";
+    Layout = "~/Views/Shared/TrangChu_LayoutPage.cshtml";
+}
+<div class="container" style="margin-top:30px; padding-bottom:10%">
+    <div class="row">
+        <div class="col-lg-12 col-md-12 col-12">
+            <ul class="nav nav-tabs" style="display:flex; justify-content:center; font-weight:bold; font-size:large; padding-top:2%;">
+                <li class="nav-item">
+                    <a class="nav-link active" data-toggle="tab" href="#tab-all" style="color:#1E90FF;">Tất cả</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" data-toggle="tab" href="#tab-waiting-payment" style="color:#1E90FF;">Chờ thanh toán</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" data-toggle="tab" href="#tab-waiting-delivery" style="color:#1E90FF;">Chờ giao hàng</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" data-toggle="tab" href="#tab-completed" style="color:#1E90FF;">Hoàn thành</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" data-toggle="tab" href="#tab-canceled" style="color:#1E90FF;">Đã hủy</a>
+                </li>
+            </ul>
+            <div class="tab-content">
+                <div class="tab-pane fade show active" id="tab-all">
+                    @{
+                        foreach (var dh in Model.dsDonHang)
+                        {
+                            <div class="container" style="margin-top:14px; padding:1%; background-color:#F8F8FF;">
+                                <div class="row">
+                                    <div class="col-lg-12 col-md-12 col-12">
+                                        <table class="table" style="border:none">
+                                            <thead>
+                                                <tr style="font-size:large; background-color:#B9D3EE;">
+                                                    <td>Mã đơn hàng: #@Html.DisplayFor(x => dh.MaDonHang)</td>
+                                                    <td>Ngày đặt: @dh.DONHANG.NgayDat.Value.ToString("dd/MM/yyyy")</td>
+                                                    <td colspan="3">@Html.DisplayFor(x => dh.DONHANG.TinhTrang)</td>
+                                                </tr>
+                                                <tr style="font-size:large">
+                                                    <th>Hình sản phẩm</th>
+                                                    <th>Tên sản phẩm</th>
+                                                    <th>Số lượng</th>
+                                                    <th>Giá</th>
+                                                    <th>Thành tiền</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                @foreach (var item in Model.dsDonHang)
+                                                {
+                                                    if (item.MaDonHang == dh.MaDonHang)
+                                                    {
+                                                        <tr style="font-size:medium">
+                                                            <td><img src="~/assets/user/images/sach/@Html.DisplayFor(x => item.SANPHAM.HinhAnh)" style="width:60px;" alt="sách"></td>
+                                                            <td style="max-width:300px; word-wrap: break-word;">@Html.DisplayFor(x => item.SANPHAM.TenSanPham)</td>
+                                                            <td>@Html.DisplayFor(x => item.SoLuong)</td>
+                                                            @{var dgKM = item.SANPHAM.DonGia - item.SANPHAM.DonGia * item.SANPHAM.KHUYENMAI.TiLe;}
+                                                            <td>@string.Format("{0:0.000}", dgKM) đ</td>
+                                                            <td>@string.Format("{0:0.000}", item.ThanhTien) đ</td>
+                                                        </tr>
+                                                    }
+                                                }
+                                            </tbody>
+                                            <tfoot>
+                                                <tr style="font-size:large">
+                                                    <td>@Html.DisplayFor(x => dh.DONHANG.ThanhToan)</td>
+                                                    <td colspan="3">Tổng thành tiền:</td>
+                                                    <td style="font-weight:bold; color:orangered">@string.Format("{0:0.000}", dh.DONHANG.TongThanhTien) đ</td>
+                                                </tr>
+                                            </tfoot>
+                                        </table>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div style="float:right; padding-right:4%">
+                                        <a href="#huyDon" id="huy" data-toggle="modal" data-id="@dh.MaDonHang" class="btn btn-danger" style="font-size:large; font-weight:bold;">Huỷ đơn hàng</a>
+                                    </div>
+                                </div>
+                            </div>
+                        }
+                    }
+                </div>
+                <div class="tab-pane fade" id="tab-waiting-payment">
+                    @{
+                        foreach (var dh in Model.dsDHChoThanhToan)
+                        {
+                            <div class="container" style="margin-top:14px; padding:1%; background-color:#F8F8FF;">
+                                <div class="row">
+                                    <div class="col-lg-12 col-md-12 col-12">
+                                        <table class="table" style="border:none">
+                                            <thead>
+                                                <tr style="font-size:large; background-color:#B9D3EE;">
+                                                    <td>Mã đơn hàng: #@Html.DisplayFor(x => dh.MaDonHang)</td>
+                                                    <td>Ngày đặt: @dh.DONHANG.NgayDat.Value.ToString("dd/MM/yyyy")</td>
+                                                    <td colspan="3">@Html.DisplayFor(x => dh.DONHANG.TinhTrang)</td>
+                                                </tr>
+                                                <tr style="font-size:large">
+                                                    <th>Hình sản phẩm</th>
+                                                    <th>Tên sản phẩm</th>
+                                                    <th>Số lượng</th>
+                                                    <th>Giá</th>
+                                                    <th>Thành tiền</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                @foreach (var item in Model.dsDHChoThanhToan)
+                                                {
+                                                    if (item.MaDonHang == dh.MaDonHang)
+                                                    {
+                                                        <tr style="font-size:medium">
+                                                            <td><img src="~/assets/user/images/sach/@Html.DisplayFor(x => item.SANPHAM.HinhAnh)" style="width:60px;" alt="sách"></td>
+                                                            <td style="max-width:300px; word-wrap: break-word;">@Html.DisplayFor(x => item.SANPHAM.TenSanPham)</td>
+                                                            <td>@Html.DisplayFor(x => item.SoLuong)</td>
+                                                            @{var dgKM = item.SANPHAM.DonGia - item.SANPHAM.DonGia * item.SANPHAM.KHUYENMAI.TiLe;}
+                                                            <td>@string.Format("{0:0.000}", dgKM) đ</td>
+                                                            <td>@string.Format("{0:0.000}", item.ThanhTien) đ</td>
+                                                        </tr>
+                                                    }
+                                                }
+                                            </tbody>
+                                            <tfoot>
+                                                <tr style="font-size:large">
+                                                    <td>@Html.DisplayFor(x => dh.DONHANG.ThanhToan)</td>
+                                                    <td colspan="3">Tổng thành tiền:</td>
+                                                    <td style="font-weight:bold; color:orangered">@string.Format("{0:0.000}", dh.DONHANG.TongThanhTien) đ</td>
+                                                </tr>
+                                            </tfoot>
+                                        </table>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div style="float:right; padding-right:4%">
+                                        @{
+                                                BaseController pub = new BaseController();
+                                                var urlTT = pub.UrlPayment(4, dh.MaDonHang);
+                                        }
+                                        <a href="@urlTT" class="btn btn-primary" style="font-size:large; font-weight:bold;">Tiến hành thanh toán</a>
+                                    </div>
+                                </div>
+                            </div>
+                        }
+                    }
+                </div>
+                <div class="tab-pane fade" id="tab-waiting-delivery">
+                    @{
+                        foreach (var dh in Model.dsDHChoGiaoHang)
+                        {
+                            <div class="container" style="margin-top:14px; padding:1%; background-color:#F8F8FF;">
+                                <div class="row">
+                                    <div class="col-lg-12 col-md-12 col-12">
+                                        <table class="table" style="border:none">
+                                            <thead>
+                                                <tr style="font-size:large; background-color:#B9D3EE;">
+                                                    <td>Mã đơn hàng: #@Html.DisplayFor(x => dh.MaDonHang)</td>
+                                                    <td>Ngày đặt: @dh.DONHANG.NgayDat.Value.ToString("dd/MM/yyyy")</td>
+                                                    <td colspan="3"></td>
+                                                </tr>
+                                                <tr style="font-size:large">
+                                                    <th>Hình sản phẩm</th>
+                                                    <th>Tên sản phẩm</th>
+                                                    <th>Số lượng</th>
+                                                    <th>Giá</th>
+                                                    <th>Thành tiền</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                @foreach (var item in Model.dsDHChoGiaoHang)
+                                                {
+                                                    if (item.MaDonHang == dh.MaDonHang)
+                                                    {
+                                                        <tr style="font-size:medium">
+                                                            <td><img src="~/assets/user/images/sach/@Html.DisplayFor(x => item.SANPHAM.HinhAnh)" style="width:60px;" alt="sách"></td>
+                                                            <td style="max-width:300px; word-wrap: break-word;">@Html.DisplayFor(x => item.SANPHAM.TenSanPham)</td>
+                                                            <td>@Html.DisplayFor(x => item.SoLuong)</td>
+                                                            @{var dgKM = item.SANPHAM.DonGia - item.SANPHAM.DonGia * item.SANPHAM.KHUYENMAI.TiLe;}
+                                                            <td>@string.Format("{0:0.000}", dgKM) đ</td>
+                                                            <td>@string.Format("{0:0.000}", item.ThanhTien) đ</td>
+                                                        </tr>
+                                                    }
+                                                }
+                                            </tbody>
+                                            <tfoot>
+                                                <tr style="font-size:large">
+                                                    <td>@Html.DisplayFor(x => dh.DONHANG.ThanhToan)</td>
+                                                    <td colspan="3">Tổng thành tiền:</td>
+                                                    <td style="font-weight:bold; color:orangered">@string.Format("{0:0.000}", dh.DONHANG.TongThanhTien) đ</td>
+                                                </tr>
+                                            </tfoot>
+                                        </table>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div style="float:right; padding-right:4%">
+                                        <a href="#" class="btn btn-success" style="font-size:large; pointer-events:none; font-weight:bold;">Đang giao hàng</a>
+                                    </div>
+                                </div>
+                            </div>
+                        }
+                    }
+                </div>
+                <div class="tab-pane fade" id="tab-completed">
+                    @{
+                        foreach (var dh in Model.dsDHHoanThanh)
+                        {
+                            <div class="container" style="margin-top:14px; padding:1%; background-color:#F8F8FF;">
+                                <div class="row">
+                                    <div class="col-lg-12 col-md-12 col-12">
+                                        <table class="table" style="border:none">
+                                            <thead>
+                                                <tr style="font-size:large; background-color:#B9D3EE;">
+                                                    <td>Mã đơn hàng: #@Html.DisplayFor(x => dh.MaDonHang)</td>
+                                                    <td>Ngày đặt: @dh.DONHANG.NgayDat.Value.ToString("dd/MM/yyyy")</td>
+                                                    <td colspan="3">@Html.DisplayFor(x => dh.DONHANG.TinhTrang)</td>
+                                                </tr>
+                                                <tr style="font-size:large">
+                                                    <th>Hình sản phẩm</th>
+                                                    <th>Tên sản phẩm</th>
+                                                    <th>Số lượng</th>
+                                                    <th>Giá</th>
+                                                    <th>Thành tiền</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                @foreach (var item in Model.dsDHHoanThanh)
+                                                {
+                                                    if (item.MaDonHang == dh.MaDonHang)
+                                                    {
+                                                        <tr style="font-size:medium">
+                                                            <td><img src="~/assets/user/images/sach/@Html.DisplayFor(x => item.SANPHAM.HinhAnh)" style="width:60px;" alt="sách"></td>
+                                                            <td style="max-width:300px; word-wrap: break-word;">@Html.DisplayFor(x => item.SANPHAM.TenSanPham)</td>
+                                                            <td>@Html.DisplayFor(x => item.SoLuong)</td>
+                                                            @{var dgKM = item.SANPHAM.DonGia - item.SANPHAM.DonGia * item.SANPHAM.KHUYENMAI.TiLe;}
+                                                            <td>@string.Format("{0:0.000}", dgKM) đ</td>
+                                                            <td>@string.Format("{0:0.000}", item.ThanhTien) đ</td>
+                                                        </tr>
+                                                    }
+                                                }
+                                            </tbody>
+                                            <tfoot>
+                                                <tr style="font-size:large">
+                                                    <td>@Html.DisplayFor(x => dh.DONHANG.ThanhToan)</td>
+                                                    <td colspan="3">Tổng thành tiền:</td>
+                                                    <td style="font-weight:bold; color:orangered">@string.Format("{0:0.000}", dh.DONHANG.TongThanhTien) đ</td>
+                                                </tr>
+                                            </tfoot>
+                                        </table>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div style="float:right; padding-right:4%">
+                                        <a href="#" class="btn btn-warning" style="font-size:large; font-weight:bold;">Đánh giá</a>
+                                        <a href="#" class="btn btn-info" style="font-size:large; pointer-events:none; font-weight:bold;">Hoàn thành</a>
+                                    </div>
+                                </div>
+                            </div>
+                        }
+                    }
+                </div>
+                <div class="tab-pane fade" id="tab-canceled">
+                    @{
+                        foreach (var dh in Model.dsDHDaHuy)
+                        {
+                            <div class="container" style="margin-top:14px; padding:1%; background-color:#F8F8FF;">
+                                <div class="row">
+                                    <div class="col-lg-12 col-md-12 col-12">
+                                        <table class="table" style="border:none">
+                                            <thead>
+                                                <tr style="font-size:large; background-color:#B9D3EE;">
+                                                    <td>Mã đơn hàng: #@Html.DisplayFor(x => dh.MaDonHang)</td>
+                                                    <td>Ngày đặt: @dh.DONHANG.NgayDat.Value.ToString("dd/MM/yyyy")</td>
+                                                    <td colspan="3"></td>
+                                                </tr>
+                                                <tr style="font-size:large">
+                                                    <th>Hình sản phẩm</th>
+                                                    <th>Tên sản phẩm</th>
+                                                    <th>Số lượng</th>
+                                                    <th>Giá</th>
+                                                    <th>Thành tiền</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                @foreach (var item in Model.dsDHDaHuy)
+                                                {
+                                                    if (item.MaDonHang == dh.MaDonHang)
+                                                    {
+                                                        <tr style="font-size:medium">
+                                                            <td><img src="~/assets/user/images/sach/@Html.DisplayFor(x => item.SANPHAM.HinhAnh)" style="width:60px;" alt="sách"></td>
+                                                            <td style="max-width:300px; word-wrap: break-word;">@Html.DisplayFor(x => item.SANPHAM.TenSanPham)</td>
+                                                            <td>@Html.DisplayFor(x => item.SoLuong)</td>
+                                                            @{var dgKM = item.SANPHAM.DonGia - item.SANPHAM.DonGia * item.SANPHAM.KHUYENMAI.TiLe;}
+                                                            <td>@string.Format("{0:0.000}", dgKM) đ</td>
+                                                            <td>@string.Format("{0:0.000}", item.ThanhTien) đ</td>
+                                                        </tr>
+                                                    }
+                                                }
+                                            </tbody>
+                                            <tfoot>
+                                                <tr style="font-size:large">
+                                                    <td>@Html.DisplayFor(x => dh.DONHANG.ThanhToan)</td>
+                                                    <td colspan="3">Tổng thành tiền:</td>
+                                                    <td style="font-weight:bold; color:orangered">@string.Format("{0:0.000}", dh.DONHANG.TongThanhTien) đ</td>
+                                                </tr>
+                                            </tfoot>
+                                        </table>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div style="float:right; padding-right:4%">
+                                        <a href="#" class="btn btn-danger" style="font-size:large; pointer-events:none; font-weight:bold;">Đã huỷ</a>
+                                    </div>
+                                </div>
+                            </div>
+                        }
+                    }
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script>
+    $(document).ready(function () {
+        // Kích hoạt tab-content đầu tiên sử dụng sự kiện shown.bs.tab
+        $('a[data-toggle="tab"]').on('shown.bs.tab', function (e) {
+            var target = $(e.target).attr("href");
+            $(target).addClass("show active");
+        });
+
+        // Kích hoạt sẵn tab-content đầu tiên
+        $('a[data-toggle="tab"][href="#tab-all"]').tab('show');
+    });
+</script>
+<!-- Huy Don Hang -->
+<div id="huyDon" class="modal fade">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title">Huỷ đơn hàng</h4>
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+            </div>
+            <div class="modal-body">
+                <p>Bạn có chắc muốn huỷ đơn hàng này ?</p>
+            </div>
+            @using (Html.BeginForm("HuyDonHang", "KhachHang", FormMethod.Post))
+            {
+                <input type="hidden" id="maHuy" name="maDonHang" />
+                <div class="modal-footer">
+                    <input type="button" class="btn btn-default" data-dismiss="modal" value="Không">
+                    <input id="btnXoa" type="submit" class="btn btn-danger" value="Huỷ Đơn">
+                </div>
+            }
+        </div>
+    </div>
+</div>
+<!-- Xac Nhan Da Nhan Hang -->
+<div id="daNhan" class="modal fade">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title">Xác nhận giao hàng</h4>
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+            </div>
+            <div class="modal-body">
+                <p>Bạn đã nhận hàng thành công</p>
+            </div>
+            @using (Html.BeginForm("NhanDonHang", "KhachHang", FormMethod.Post))
+            {
+                <input type="hidden" id="maNhan" name="maDonHang" />
+                <div class="modal-footer">
+                    <input type="button" class="btn btn-default" data-dismiss="modal" value="Không">
+                    <input type="submit" class="btn btn-info" value="Xác Nhận">
+                </div>
+            }
+        </div>
+    </div>
+</div>

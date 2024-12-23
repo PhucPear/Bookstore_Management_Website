@@ -1,0 +1,58 @@
+﻿@model Website_QuanLyNhaSachNguyenVanCu.Models.DanhSachTheoSanPham
+<div class="tg-navigationarea">
+    <div class="container">
+        <div class="row">
+            <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+                <nav id="tg-nav" class="tg-nav">                  
+                    <div id="tg-navigation" class="collapse navbar-collapse tg-navigation">
+                        <ul style="font-size:large; display:flex; justify-content:center;">
+                            <li class="menu-item-has-children menu-item-has-mega-menu">
+                                <a href="@Url.Action("SanPham", "SanPham")">Danh Mục Sản Phẩm</a>
+                                <div class="mega-menu">
+                                    <ul class="tg-themetabnav" role="tablist">
+                                        @{
+                                            foreach (var danhMuc in Model.dsDanhMuc)
+                                            {
+                                                <li role="presentation" class="@(danhMuc == Model.dsDanhMuc.First() ? "active" : "")">
+                                                    <a href="#@danhMuc.MaDanhMuc" aria-controls="@danhMuc.MaDanhMuc" role="tab" data-toggle="tab">@danhMuc.TenDanhMuc</a>
+                                                </li>
+                                            }
+                                        }                                       
+                                    </ul>
+
+                                    <div class="tab-content tg-themetabcontent">
+                                        @{
+                                            foreach (var danhMuc in Model.dsDanhMuc)
+                                            {
+                                                <div role="tabpanel" class="tab-pane @(danhMuc == Model.dsDanhMuc.First() ? "active" : "")" id="@danhMuc.MaDanhMuc">
+                                                    <ul>
+                                                        <li>
+                                                            <div class="tg-linkstitle">
+                                                                <h2><a href="@Url.Action("SanPhamTheoDanhMuc", "SanPham", new { @maDanhMuc = danhMuc.MaDanhMuc })">@danhMuc.TenDanhMuc</a></h2>
+                                                            </div>
+                                                            <ul>
+                                                                @foreach (var loaiSP in Model.dsLoaiSanPham.Where(l => l.MaDanhMuc == danhMuc.MaDanhMuc))
+                                                                {
+                                                                    <li><a href="@Url.Action("SanPhamTheoLoai", "SanPham", new { @maLSP = loaiSP.MaLoaiSP })">@loaiSP.TenLoaiSP</a></li>
+                                                                }
+                                                            </ul>
+                                                        </li>
+                                                    </ul>
+                                                </div>
+                                            }
+                                        }
+                                    </div>
+                                </div>
+                            </li>                          
+                            <li>
+                                <a href="@Url.Action("SanPhamTheoDanhMuc", "SanPham", new { @maDanhMuc = 1 })">Sách</a>                           
+                            </li>
+                            <li><a href="@Url.Action("SanPhamTheoDanhMuc", "SanPham", new { @maDanhMuc = 2 })">Văn Phòng Phẩm</a></li>
+                            <li><a href="@Url.Action("SanPhamTheoDanhMuc", "SanPham", new { @maDanhMuc = 3 })">Quà Lưu Niệm</a></li>                        
+                        </ul>
+                    </div>
+                </nav>
+            </div>
+        </div>
+    </div>
+</div>

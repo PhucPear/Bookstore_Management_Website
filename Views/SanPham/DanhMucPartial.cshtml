@@ -1,0 +1,19 @@
+﻿@model Website_QuanLyNhaSachNguyenVanCu.Models.DanhSachTheoSanPham
+@{
+    foreach (var dm in Model.dsDanhMuc)
+    {
+        <div class="tg-widget tg-catagories">
+            <div class="tg-widgettitle">
+                <h3><a href="@Url.Action("SanPhamTheoDanhMuc", "SanPham", new { @maDanhMuc = dm.MaDanhMuc })" style="color:white; font-size:large;">@Html.DisplayFor(item => dm.TenDanhMuc)</a></h3>
+            </div>
+            @foreach (var loai in Model.dsLoaiSanPham.Where(l => l.MaDanhMuc == dm.MaDanhMuc))
+            {
+                <div class="tg-widgetcontent">
+                    <ul>
+                        <li><a href="@Url.Action("SanPhamTheoLoai", "SanPham", new { @maLSP = loai.MaLoaiSP })" style="font-size:medium;"><span>@Html.DisplayFor(item => loai.TenLoaiSP)</span></a></li>
+                    </ul>
+                </div>
+            }
+        </div>
+    }
+}

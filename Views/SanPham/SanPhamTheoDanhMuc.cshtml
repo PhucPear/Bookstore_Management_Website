@@ -1,0 +1,55 @@
+﻿@model PagedList.IPagedList<Website_QuanLyNhaSachNguyenVanCu.Models.SANPHAM>
+@using PagedList.Mvc;
+@{
+    ViewBag.Title = "SanPhamTheoDanhMuc";
+    Layout = "~/Views/Shared/SanPham_LayoutPage.cshtml";
+}
+<div class="col-xs-12 col-sm-8 col-md-8 col-lg-9 pull-right">
+    <div id="tg-content" class="tg-content">
+        <div class="tg-products">            
+            <div class="tg-sectionhead">
+                <h2>@ViewBag.Ten</h2>
+            </div>
+            <div class="tg-productgrid">
+                @{
+                    foreach (var sp in Model)
+                    {
+                        <div class="col-xs-6 col-sm-6 col-md-4 col-lg-3">
+                            <div class="tg-postbook">
+                                <figure class="tg-featureimg">
+                                    <div class="tg-bookimg">
+                                        <div class="tg-frontcover"><img src="~/assets/user/images/sach/@Html.DisplayFor(item => sp.HinhAnh)" style="height:230px" alt="image description"></div>
+                                        <div class="tg-backcover"><img src="~/assets/user/images/sach/@Html.DisplayFor(item => sp.HinhAnh)" style="height:230px" alt="image description"></div>
+                                    </div>                                  
+                                </figure>
+                                <div class="tg-postbookcontent">
+                                    <ul class="tg-bookscategories">
+                                        <li><a href="@Url.Action("SanPhamTheoLoai", "SanPham", new { @maLSP = sp.MaLoaiSP })">@Html.DisplayFor(item => sp.LOAISANPHAM.TenLoaiSP)</a></li>
+                                    </ul>
+                                    <div class="tg-themetagbox"><span class="tg-themetag">sale</span></div>
+                                    <div class="tg-booktitle" style="white-space: nowrap; overflow:hidden; text-overflow: ellipsis">
+                                        <h3><a href="@Url.Action("ChiTietSanPham", "SanPham", new { @maSP = sp.MaSanPham })">@Html.DisplayFor(item => sp.TenSanPham)</a></h3>
+                                    </div>
+                                    <span class="tg-stars"><span></span></span>
+                                    <span class="tg-bookprice">
+                                        <ins>@Html.DisplayFor(item => sp.DonGia)</ins>
+                                        <del>$27.20</del>
+                                    </span>
+                                    <button class="tg-btn tg-btnstyletwo" onclick="themSPVaoGioHang(@sp.MaSanPham)">
+                                        <i class="fa fa-shopping-basket"></i>
+                                        <em>Thêm Vào Giỏ</em>
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    }
+                }
+                <div style="clear: both; text-align: center; font-size: 20px">
+                    @Html.PagedListPager(Model, page => Url.Action("SanPhamTheoDanhMuc", new { page, @maDanhMuc = ViewBag.maDM }))
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+

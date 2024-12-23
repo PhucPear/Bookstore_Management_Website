@@ -1,0 +1,165 @@
+﻿@model Website_QuanLyNhaSachNguyenVanCu.Models.DanhSachTheoSanPham
+@{
+    ViewBag.Title = "TrangChu";
+    Layout = "~/Views/Shared/TrangChu_LayoutPage.cshtml";
+}
+<section class="tg-sectionspace tg-haslayout">
+    <div class="container">
+        <div class="row">
+            <div id="tg-content" class="tg-content">
+                <div class="tg-products">
+                    <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+                        <div class="tg-sectionhead">
+                            <h2><span>Sự lựa chọn của người dùng</span>Sách bán chạy nhất</h2>
+                        </div>
+                    </div>
+                    <div class="tg-productgrid">
+                        @{
+                            int maDM = 0;
+                            foreach (var sach in Model.dsSach)
+                            {
+                                <div class="tg-postbook" style="width:170px; margin-left:20px">
+                                    <figure class="tg-featureimg">
+                                        <div class="tg-bookimg">
+                                            <div class="tg-frontcover"><img src="~/assets/user/images/sach/@Html.DisplayFor(item => sach.HinhAnh)" style="height:200px; width:170px;" alt="image description"></div>
+                                            <div class="tg-backcover"><img src="~/assets/user/images/sach/@Html.DisplayFor(item => sach.HinhAnh)" style="height:200px; width:170px;" alt="image description"></div>
+                                        </div>                                      
+                                    </figure>
+                                    <div class="tg-postbookcontent">
+                                        <ul class="tg-bookscategories">
+                                            <li><a href="@Url.Action("SanPhamTheoLoai", "SanPham", new { @maLSP = sach.MaLoaiSP })">@Html.DisplayFor(item => sach.LOAISANPHAM.TenLoaiSP)</a></li>
+                                        </ul>
+                                        <div class="tg-themetagbox"><span class="tg-themetag">sale</span></div>
+                                        <div class="tg-booktitle" style="white-space: nowrap; overflow:hidden; text-overflow: ellipsis">
+                                            <h3><a href="@Url.Action("ChiTietSanPham", "SanPham", new { @maSP = sach.MaSanPham })">@Html.DisplayFor(item => sach.TenSanPham)</a></h3>
+                                        </div>
+                                        <span class="tg-stars"><span></span></span>
+                                        <span class="tg-bookprice">
+                                            @{var dgKM = sach.DonGia - sach.DonGia * sach.KHUYENMAI.TiLe;}
+                                            <ins>@string.Format("{0:0.000}", dgKM) đ</ins>
+                                            <del>@sach.DonGia đ</del>
+                                        </span>
+                                        <button class="tg-btn tg-btnstyletwo" onclick="themSPVaoGioHang(@sach.MaSanPham)">
+                                            <i class="fa fa-shopping-basket"></i>
+                                            <em>Thêm Vào Giỏ</em>
+                                        </button>
+                                    </div>
+                                </div>
+                                            maDM = (int)sach.LOAISANPHAM.MaDanhMuc;
+                            }
+                        }
+                    </div>
+                </div>
+                <div style="text-align:center; margin-bottom:30px">
+                    <a class="tg-btn" href="@Url.Action("SanPhamTheoDanhMuc", "SanPham", new { @maDanhMuc = maDM })">Xem Thêm</a>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!--**************- Văn Phòng Phẩm -***************-->
+    <div class="container">
+        <div class="row">
+            <div id="tg-content" class="tg-content">
+                <div class="tg-products">
+                    <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+                        <div class="tg-sectionhead">
+                            <h2><span>Sự lựa chọn của người dùng</span>Sản phẩm bán chạy nhất</h2>
+                        </div>
+                    </div>
+                    <div class="tg-productgrid">
+                        @{
+                            int maDM2 = 0;
+                            foreach (var vpp in Model.dsVanPhongPham)
+                            {
+                                <div class="tg-postbook" style="width:170px; margin-left:20px">
+                                    <figure class="tg-featureimg">
+                                        <div class="tg-bookimg">
+                                            <div class="tg-frontcover"><img src="~/assets/user/images/sach/@Html.DisplayFor(item => vpp.HinhAnh)" style="height:200px; width:170px;" alt="image description"></div>
+                                            <div class="tg-backcover"><img src="~/assets/user/images/sach/@Html.DisplayFor(item => vpp.HinhAnh)" style="height:200px; width:170px;" alt="image description"></div>
+                                        </div>                                       
+                                    </figure>
+                                    <div class="tg-postbookcontent">
+                                        <ul class="tg-bookscategories">
+                                            <li><a href="@Url.Action("SanPhamTheoLoai", "SanPham", new { @maLSP = vpp.MaLoaiSP })">@Html.DisplayFor(item => vpp.LOAISANPHAM.TenLoaiSP)</a></li>
+                                        </ul>
+                                        <div class="tg-themetagbox"><span class="tg-themetag">sale</span></div>
+                                        <div class="tg-booktitle" style="white-space: nowrap; overflow:hidden; text-overflow: ellipsis">
+                                            <h3><a href="@Url.Action("ChiTietSanPham", "SanPham", new { @maSP = vpp.MaSanPham })">@Html.DisplayFor(item => vpp.TenSanPham)</a></h3>
+                                        </div>
+                                        <span class="tg-stars"><span></span></span>
+                                        <span class="tg-bookprice">
+                                            @{var dgKM = vpp.DonGia - vpp.DonGia * vpp.KHUYENMAI.TiLe;}
+                                            <ins>@string.Format("{0:0.000}", dgKM) đ</ins>
+                                            <del>@vpp.DonGia đ</del>
+                                        </span>
+                                        <button class="tg-btn tg-btnstyletwo" onclick="themSPVaoGioHang(@vpp.MaSanPham)">
+                                            <i class="fa fa-shopping-basket"></i>
+                                            <em>Thêm Vào Giỏ</em>
+                                        </button>
+                                    </div>
+                                </div>
+                                            maDM2 = (int)vpp.LOAISANPHAM.MaDanhMuc;
+                            }
+                        }
+                    </div>
+                    <div style="text-align:center; margin-bottom:30px">
+                        <a class="tg-btn" href="@Url.Action("SanPhamTheoDanhMuc", "SanPham", new { @maDanhMuc = maDM2 })">Xem Thêm</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!--**************- Quà Lưu Niệm -***************-->
+    <div class="container">
+        <div class="row">
+            <div id="tg-content" class="tg-content">
+                <div class="tg-products">
+                    <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+                        <div class="tg-sectionhead">
+                            <h2><span>Sự lựa chọn của người dùng</span>Quà lưu niệm bán chạy nhất</h2>
+                        </div>
+                    </div>
+                    <div class="tg-productgrid">
+                        @{
+                            int maDM3 = 0;
+                            foreach (var qua in Model.dsQuaLuuNiem)
+                            {
+                                <div class="tg-postbook" style="width:170px; margin-left:20px">
+                                    <figure class="tg-featureimg">
+                                        <div class="tg-bookimg">
+                                            <div class="tg-frontcover"><img src="~/assets/user/images/sach/@Html.DisplayFor(item => qua.HinhAnh)" style="height:200px; width:170px;" alt="image description"></div>
+                                            <div class="tg-backcover"><img src="~/assets/user/images/sach/@Html.DisplayFor(item => qua.HinhAnh)" style="height:200px; width:170px;" alt="image description"></div>
+                                        </div>                                     
+                                    </figure>
+                                    <div class="tg-postbookcontent">
+                                        <ul class="tg-bookscategories">
+                                            <li><a href="@Url.Action("SanPhamTheoLoai", "SanPham", new { @maLSP = qua.MaLoaiSP })">@Html.DisplayFor(item => qua.LOAISANPHAM.TenLoaiSP)</a></li>
+                                        </ul>
+                                        <div class="tg-themetagbox"><span class="tg-themetag">sale</span></div>
+                                        <div class="tg-booktitle" style="white-space: nowrap; overflow:hidden; text-overflow: ellipsis">
+                                            <h3><a href="@Url.Action("ChiTietSanPham", "SanPham", new { @maSP = qua.MaSanPham })">@Html.DisplayFor(item => qua.TenSanPham)</a></h3>
+                                        </div>
+                                        <span class="tg-stars"><span></span></span>
+                                        <span class="tg-bookprice">
+                                            @{var dgKM = qua.DonGia - qua.DonGia * qua.KHUYENMAI.TiLe;}
+                                            <ins>@string.Format("{0:0.000}", dgKM) đ</ins>
+                                            <del>@qua.DonGia đ</del>
+                                        </span>
+                                        <button class="tg-btn tg-btnstyletwo" onclick="themSPVaoGioHang(@qua.MaSanPham)">
+                                            <i class="fa fa-shopping-basket"></i>
+                                            <em>Thêm Vào Giỏ</em>
+                                        </button>
+                                    </div>
+                                </div>
+                                            maDM3 = (int)qua.LOAISANPHAM.MaDanhMuc;
+                            }
+                        }
+                    </div>
+                    <div style="text-align:center; margin-bottom:30px">
+                        <a class="tg-btn" href="@Url.Action("SanPhamTheoDanhMuc", "SanPham", new { @maDanhMuc = maDM3 })">Xem Thêm</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>

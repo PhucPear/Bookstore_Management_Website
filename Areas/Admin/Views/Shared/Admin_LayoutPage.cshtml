@@ -1,0 +1,202 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="description" content="">
+    <meta name="author" content="">
+
+    <title>Admin Nhà Sách Nguyễn Văn Cừ</title>
+
+    <!-- Custom fonts for this template-->
+    <link href="~/assets/admin/vendor/fontawesome-free/css/all.min.css" rel="stylesheet" type="text/css">
+    <link href="https://fonts.googleapis.com/css?family=Nunito:200,200i,300,300i,400,400i,600,600i,700,700i,800,800i,900,900i" rel="stylesheet">
+
+    <!-- Custom styles for this template-->
+    <link href="~/assets/admin/css/sb-admin-2.min.css" rel="stylesheet">
+    <link href="~/Content/PagedList.css" rel="stylesheet">
+
+    <link href="~/assets/admin/css/tables.css" rel="stylesheet">
+    <!-- Lưu file -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/FileSaver.js/2.0.2/FileSaver.min.js"></script>
+    <script src="~/assets/admin/js/saveFile.js"></script>
+   
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+
+</head>
+
+<body id="page-top">
+    <!-- Page Wrapper -->
+    <div id="wrapper">
+
+        <!-- Sidebar -->
+        <ul class="navbar-nav bg-gradient-primary sidebar sidebar-dark accordion" id="accordionSidebar" style="padding-top:4%; font-weight:bold;">
+
+            <!-- Sidebar - Brand -->
+            <a class="sidebar-brand d-flex align-items-center justify-content-center" href="@Url.Action("QuanTri", "AdminHome")">
+                <div class="sidebar-brand-text mx-3">Nhà Sách Nguyễn Văn Cừ</div>
+            </a>
+
+            <!-- Divider -->
+            <hr class="sidebar-divider my-0">           
+          
+
+            <!-- Nav Item - Pages Collapse Menu -->
+            <li class="nav-item">
+                <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseTwo"
+                   aria-expanded="true" aria-controls="collapseTwo">
+                    <i class="fas fa-fw fa-cog"></i>
+                    <span>Database</span>
+                </a>
+                <div id="collapseTwo" class="collapse" aria-labelledby="headingTwo" data-parent="#accordionSidebar">
+                    <div class="bg-white py-2 collapse-inner rounded">                        
+                        <a class="collapse-item" href="@Url.Action("Backup", "Database")">Sao Lưu</a>
+                        <a class="collapse-item" href="@Url.Action("Restore", "Database")">Phục Hồi</a>
+                    </div>
+                </div>
+            </li>
+           
+
+            <!-- Divider -->
+            <hr class="sidebar-divider">
+
+            
+            <!-- Nav Item - Pages Collapse Menu -->
+            <li class="nav-item">
+                <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapsePages"
+                   aria-expanded="true" aria-controls="collapsePages">
+                    <i class="fas fa-fw fa-folder"></i>
+                    <span>Quản trị Sản Phẩm</span>
+                </a>
+                <div id="collapsePages" class="collapse" aria-labelledby="headingPages" data-parent="#accordionSidebar">
+                    <div class="bg-white py-2 collapse-inner rounded">
+                        <a class="collapse-item" href="@Url.Action("QuanTriDanhMuc", "AdminSanPham")">Danh Mục</a>
+                        <a class="collapse-item" href="@Url.Action("QuanTriLoaiSanPham", "AdminSanPham")">Loại Sản Phẩm</a>
+                        <a class="collapse-item" href="@Url.Action("QuanTriSanPham", "AdminSanPham")">Sản Phẩm</a>                       
+                    </div>
+                </div>
+            </li>
+
+            <li class="nav-item">
+                <a class="nav-link" href="@Url.Action("QuanTriKhachHang", "AdminNguoiDung")">
+                    <i class="fas fa-fw fa-user"></i>
+                    <span>Khách Hàng</span>
+                </a>
+            </li>
+
+            <li class="nav-item">
+                <a class="nav-link" href="@Url.Action("QuanTriNhanVien", "AdminNguoiDung")">
+                    <i class="fas fa-fw fa-address-card"></i>
+                    <span>Nhân Viên</span>
+                </a>
+            </li>
+
+            <li class="nav-item">
+                <a class="nav-link" href="@Url.Action("QuanTriKhuyenMai", "KhuyenMai")">
+                    <i class="fas fa-fw fa-gift"></i>
+                    <span>Khuyến Mãi</span>
+                </a>
+            </li> 
+            
+            <li class="nav-item">
+                <a class="nav-link" href="@Url.Action("QuanLyDonHang", "DonHang")">
+                    <i class="fas fa-fw fa-shopping-cart"></i>
+                    <span>Đơn Hàng</span>
+                </a>
+            </li>
+
+            <li class="nav-item">
+                <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapsePagess"
+                   aria-expanded="true" aria-controls="collapsePagess">
+                    <i class="fas fa-fw fa-table"></i>
+                    <span>Thống Kê Báo Cáo</span>
+                </a>
+                <div id="collapsePagess" class="collapse" aria-labelledby="headingPages" data-parent="#accordionSidebar">
+                    <div class="bg-white py-2 collapse-inner rounded">
+                        <a class="collapse-item" href="@Url.Action("ListSanPham", "ThongKe")">Số Lượng Tồn</a>
+                        <a class="collapse-item" href="@Url.Action("QuanLyBanHang", "ThongKe")">Doanh Thu</a>
+                    </div>
+                </div>
+            </li>                         
+          
+
+        </ul>
+        <!-- End of Sidebar -->
+        <!-- Content Wrapper -->
+        <div id="content-wrapper" class="d-flex flex-column">
+
+            <!-- Main Content -->
+            <div id="content">
+
+                <!-- Topbar -->
+                <nav class="navbar navbar-expand navbar-light bg-white topbar mb-4 static-top shadow">
+
+                    <!-- Sidebar Toggle (Topbar) -->
+                    <button id="sidebarToggleTop" class="btn btn-link d-md-none rounded-circle mr-3">
+                        <i class="fa fa-bars"></i>
+                    </button>
+
+                    
+
+                    <!-- Topbar Navbar -->
+                    <ul class="navbar-nav ml-auto">                                              
+                        <!-- Tài khoản - Đẵng xuất -->
+                        <!-- ##################### -->
+                        @Html.Action("TaiKhoanPartial", "AdminHome")
+
+                    </ul>
+
+                </nav>
+                <!-- End of Topbar -->
+                <!-- Main -->
+                @RenderBody()
+                <!-- End Main -->
+
+            </div>
+            <!-- End of Main Content -->
+            <!-- Footer -->
+            <footer class="sticky-footer bg-white">
+                <div class="container my-auto">
+                    <div class="copyright text-center my-auto">
+                        <span>Copyright &copy; Nhà Sách Nguyễn Văn Cừ 2023</span>
+                    </div>
+                </div>
+            </footer>
+            <!-- End of Footer -->
+
+        </div>
+        <!-- End of Content Wrapper -->
+
+    </div>
+    <!-- End of Page Wrapper -->
+    <!-- Scroll to Top Button-->
+    <a class="scroll-to-top rounded" href="#page-top">
+        <i class="fas fa-angle-up"></i>
+    </a> 
+
+    <!-- Bootstrap core JavaScript-->
+    <script src="~/assets/admin/vendor/jquery/jquery.min.js"></script>
+    <script src="~/assets/admin/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
+
+    <!-- Core plugin JavaScript-->
+    <script src="~/assets/admin/vendor/jquery-easing/jquery.easing.min.js"></script>
+
+    <!-- Custom scripts for all pages-->
+    <script src="~/assets/admin/js/sb-admin-2.min.js"></script>
+
+    <!-- Page level plugins -->
+    <script src="~/assets/admin/vendor/chart.js/Chart.min.js"></script>
+
+    <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
+
+    <script src="~/assets/admin/js/tables.js"></script>
+    <script src="~/assets/admin/js/restore.js"></script>
+    <script src="~/assets/admin/js/add-data-excel.js"></script>
+
+</body>
+
+</html>
