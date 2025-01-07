@@ -10,5 +10,7 @@
 - Tìm kiếm, quản lý giỏ hàng, đặt hàng, tra cứu đơn hàng và thanh toán trực tuyến.
 - Quản lý sản phẩm: thêm, sửa, xóa, tìm kiếm sản phẩm.
 - Quản lý khách hàng: lưu thông tin khách hàng và lịch sử mua hàng.
+- Quản lý đơn hàng: tra cứu đơn hàng, lọc đơn hàng theo thời gian.
+- Quản lý nhân viên: thêm, sửa và khoá tài khoản.
 
 ---
